@@ -3,7 +3,9 @@ set -euo pipefail
 
 BASEDIR=$HOME/work/steph-concord
 PTDIR=$HOME/work/pairtree
-INDIR=$BASEDIR/inputs
+DATADIR=$BASEDIR/data
+INDIR=$DATADIR/inputs
+DISCORDTRUTHDIR=$DATADIR/discord.truth
 CLUSTMODEL=pairwise
 CLUSTRESULTDIR=$BASEDIR/scratch/clusters.steph.${CLUSTMODEL}.prior015
 TREERESULTDIR=$BASEDIR/scratch/trees
@@ -104,14 +106,33 @@ function make_tree_index {
   done > index.html
 }
 
+function calc_discord {
+  cd $TREERESULTDIR
+  for clusttype in full collapsed; do
+    for resultfn in *.${clusttype}.results.npz; do
+      runid=$(basename $resultfn | cut -d. -f1)
+      cmd="NUMBA_DISABLE_JIT=1 PYTHONPATH=$PTDIR/lib:$PYTHONPATH python3 $BASEDIR/bin/calc_concordance.py"
+      cmd+=" $INDIR/$runid.ssm"
+      cmd+=" $resultfn "
+      cmd+=" $DISCORDTRUTHDIR/${runid}.discord_truth.csv"
+      cmd+=" > ${runid}.${clusttype}.discord.csv"
+      echo $cmd
+    done
+  done | parallel -j40 --halt 1 --eta
+
+}
+
 function main {
   #compute_clusters
   #compare_cluster_count
   #plot_clusters
-  #make_index
+  #make_cluster_index
   #run_pairtree
-  plot_trees
-  make_tree_index
+
+  #plot_trees
+  #make_tree_index
+
+  calc_discord
 }
 
 main
