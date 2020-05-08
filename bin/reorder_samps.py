@@ -24,11 +24,12 @@ def main():
 
   for timepoint in ('Diagnosis', 'Relapse'):
     add(timepoint)
-    xeno_bm = [idx for idx, samp in enumerate(samps) if re.search('^%s Xeno \d+$' % timepoint, samp)]
-    for idx in xeno_bm:
-      add(samps[idx])
+    xeno_bm = [samp for samp in samps if re.search('^%s Xeno \d+$' % timepoint, samp)]
+    xeno_bm = sorted(xeno_bm, key = lambda S: int(S.rsplit(' ', 1)[1]))
+    for samp in xeno_bm:
+      add(samp)
       for suffix in xeno_suffixes:
-        add('%s %s' % (samps[idx], suffix))
+        add('%s %s' % (samp, suffix))
 
   remaining = set(range(len(samps))) - set(idxs)
   idxs += sorted(remaining)
