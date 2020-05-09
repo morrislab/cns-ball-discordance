@@ -11,6 +11,7 @@ CLUSTRESULTDIR=$BASEDIR/scratch/clusters.steph.${CLUSTMODEL}.prior015
 TREERESULTDIR=$BASEDIR/scratch/trees
 PARALLEL=10
 NCHAINS=10
+PYTHON=$HOME/.apps/bin/python3
 
 function compute_clusters {
   for conc in $(seq -10 3); do
@@ -19,7 +20,7 @@ function compute_clusters {
 
     for foo in $INDIR/*.ssm; do
       runid=$(basename $foo | cut -d. -f1)
-      cmd="python3 $PTDIR/bin/clustervars"
+      cmd="$PYTHON $PTDIR/bin/clustervars"
       cmd+=" --model $CLUSTMODEL"
       cmd+=" --parallel $NCHAINS"
       cmd+=" --chains $NCHAINS"
@@ -51,7 +52,7 @@ function compare_cluster_count {
 function plot_clusters {
   for foo in $CLUSTRESULTDIR/clusters.conc.*/*.params.json; do
     runid=$(basename $foo | cut -d. -f1)
-    echo "python3 $PTDIR/bin/plotvars --plot-relations --parallel 1 $INDIR/$runid.ssm $foo $(dirname $foo)/$runid.clusters.html 2>&1"
+    echo "$PYTHON $PTDIR/bin/plotvars --plot-relations --parallel 1 $INDIR/$runid.ssm $foo $(dirname $foo)/$runid.clusters.html 2>&1"
   done | parallel -j40 --halt 1 --eta | grep -v '^{'
 }
 
@@ -73,51 +74,54 @@ function run_pairtree {
   mkdir -p $TREERESULTDIR
   cd $TREERESULTDIR
 
-  for clusttype in full collapsed; do
-    for paramsfn in $INDIR/*.${clusttype}.params.json; do
-      runid=$(basename $paramsfn | cut -d. -f1)
-      echo "python3 $PTDIR/bin/pairtree --seed 1337 --parallel 40 --params $paramsfn --phi-fitter rprop $INDIR/$runid.ssm ${runid}.${clusttype}.results.npz 2>${runid}.${clusttype}.stderr"
-    done
+  for paramsfn in $INDIR/*.collapsed.params.json; do
+    runid=$(basename $paramsfn | cut -d. -f1)
+    echo "$PYTHON $PTDIR/bin/pairtree --seed 1337 --parallel 40 --params $paramsfn --phi-fitter rprop $INDIR/$runid.ssm ${runid}.results.npz 2>${runid}.stderr"
   done | parallel -j2 --halt 1 --eta
 }
 
 function plot_trees {
   cd $TREERESULTDIR
 
-  for clusttype in full collapsed; do
-    for resultfn in *.${clusttype}.results.npz; do
-      runid=$(basename $resultfn | cut -d. -f1)
-      for task in plottree summposterior; do
-        echo "python3 $PTDIR/bin/$task $INDIR/$runid.ssm $INDIR/${runid}.${clusttype}.params.json ${runid}.${clusttype}.results.npz ${runid}.${clusttype}.${task}.html"
-      done
+  for resultfn in *.results.npz; do
+    runid=$(basename $resultfn | cut -d. -f1)
+    for task in plottree summposterior; do
+      cmd="$PYTHON $PTDIR/bin/$task"
+      if [[ $task == plottree ]]; then
+        cmd+=" --reorder-subclones"
+      fi
+      cmd+=" --runid $runid"
+      cmd+=" $INDIR/$runid.ssm"
+      cmd+=" $INDIR/${runid}.collapsed.params.json"
+      cmd+=" $TREERESULTDIR/${runid}.results.npz"
+      cmd+=" $TREERESULTDIR/${runid}.${task}.html"
+      echo $cmd
     done
-  done # | parallel -j40 --halt 1 --eta
+  done | parallel -j40 --halt 1 --eta
 }
 
 function make_tree_index {
   cd $TREERESULTDIR
-  for clusttype in full collapsed; do
-    echo "<h2>$clusttype</h2><table>"
-    for resultfn in *.${clusttype}.results.npz; do
+  (
+    echo "<table>"
+    for resultfn in *.results.npz; do
       runid=$(basename $resultfn | cut -d. -f1)
-      echo "<tr><td>$runid</td><td><a href=${runid}.${clusttype}.plottree.html>tree</a></td><td><a href=${runid}.${clusttype}.summposterior.html>summary</a></td></tr>"
+      echo "<tr><td>$runid</td><td><a href=${runid}.plottree.html>tree</a></td><td><a href=${runid}.summposterior.html>summary</a></td></tr>"
     done
     echo "</table>"
-  done > index.html
+  ) > index.html
 }
 
 function calc_discord {
   cd $TREERESULTDIR
-  for clusttype in full collapsed; do
-    for resultfn in *.${clusttype}.results.npz; do
-      runid=$(basename $resultfn | cut -d. -f1)
-      cmd="NUMBA_DISABLE_JIT=1 PYTHONPATH=$PTDIR/lib:$PYTHONPATH python3 $BASEDIR/bin/calc_concordance.py"
-      cmd+=" $INDIR/$runid.ssm"
-      cmd+=" $resultfn "
-      cmd+=" $DISCORDTRUTHDIR/${runid}.discord_truth.csv"
-      cmd+=" > ${runid}.${clusttype}.discord.csv"
-      echo $cmd
-    done
+  for resultfn in *.results.npz; do
+    runid=$(basename $resultfn | cut -d. -f1)
+    cmd="NUMBA_DISABLE_JIT=1 PYTHONPATH=$PTDIR/lib:$PYTHONPATH $PYTHON $BASEDIR/bin/calc_concordance.py"
+    cmd+=" $INDIR/$runid.ssm"
+    cmd+=" $resultfn "
+    cmd+=" $DISCORDTRUTHDIR/${runid}.discord_truth.csv"
+    cmd+=" > ${runid}.discord.csv"
+    echo $cmd
   done | parallel -j40 --halt 1 --eta
 
 }
@@ -127,12 +131,12 @@ function main {
   #compare_cluster_count
   #plot_clusters
   #make_cluster_index
+
   #run_pairtree
+  plot_trees
+  make_tree_index
 
-  #plot_trees
-  #make_tree_index
-
-  calc_discord
+  #calc_discord
 }
 
 main
