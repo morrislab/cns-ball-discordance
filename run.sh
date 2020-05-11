@@ -13,6 +13,9 @@ PARALLEL=10
 NCHAINS=10
 PYTHON=$HOME/.apps/bin/python3
 
+declare -A TREE_INDICES
+TREE_INDICES=( ["SJBALL031"]=1 )
+
 function compute_clusters {
   for conc in $(seq -10 3); do
     outd=$CLUSTRESULTDIR/clusters.conc.$(echo $conc | tr - _)
@@ -90,6 +93,9 @@ function plot_trees {
       if [[ $task == plottree ]]; then
         cmd+=" --reorder-subclones"
       fi
+      if [[ $task == plottree && -v "TREE_INDICES[$runid]" ]]; then
+        cmd+=" --tree-index ${TREE_INDICES[$runid]}"
+      fi
       cmd+=" --runid $runid"
       cmd+=" $INDIR/$runid.ssm"
       cmd+=" $INDIR/${runid}.collapsed.params.json"
@@ -103,6 +109,7 @@ function plot_trees {
 function make_tree_index {
   cd $TREERESULTDIR
   (
+    echo "<h1>Trees</h1>"
     echo "<table>"
     for resultfn in *.results.npz; do
       runid=$(basename $resultfn | cut -d. -f1)
@@ -117,13 +124,27 @@ function calc_discord {
   for resultfn in *.results.npz; do
     runid=$(basename $resultfn | cut -d. -f1)
     cmd="NUMBA_DISABLE_JIT=1 PYTHONPATH=$PTDIR/lib:$PYTHONPATH $PYTHON $BASEDIR/bin/calc_concordance.py"
+    if [[ -v "TREE_INDICES[$runid]" ]]; then
+      cmd+=" --tree-index ${TREE_INDICES[$runid]}"
+    fi
     cmd+=" $INDIR/$runid.ssm"
     cmd+=" $resultfn "
     cmd+=" $DISCORDTRUTHDIR/${runid}.discord_truth.csv"
     cmd+=" > ${runid}.discord.csv"
     echo $cmd
   done | parallel -j40 --halt 1 --eta
+}
 
+function add_discord_to_index {
+  cd $TREERESULTDIR
+  (
+    echo "<h1>Discordance</h1>"
+    for disfn in *.discord.csv; do
+      runid=$(basename $disfn | cut -d. -f1)
+      echo "<h3><a href=$disfn>$runid</a></h3>"
+      $PYTHON $BASEDIR/bin/csv2html.py $disfn
+    done
+  ) >> index.html
 }
 
 function main {
@@ -133,10 +154,11 @@ function main {
   #make_cluster_index
 
   #run_pairtree
-  plot_trees
-  make_tree_index
+  #plot_trees
 
-  #calc_discord
+  calc_discord
+  make_tree_index
+  add_discord_to_index
 }
 
 main

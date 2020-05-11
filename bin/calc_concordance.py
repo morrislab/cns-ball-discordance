@@ -95,7 +95,7 @@ def _calc_bayes_factors(variants, clusters, eta, pairs):
     logbf[pair] = (m1_llh, m2_llh)
   return logbf
 
-def _print_concord(variants, clusters, eta, sampnames, truth):
+def _print_concord(variants, clusters, eta, sampnames, truth, bf_threshold=2, sort_by_bf=False):
   pairs = _find_samp_pairs(sampnames)
   jsd = _calc_concord_jsd(eta, pairs)
   logbf = _calc_bayes_factors(variants, clusters, eta, pairs)
@@ -109,7 +109,9 @@ def _print_concord(variants, clusters, eta, sampnames, truth):
     'm2_llh',
     'log_bf',
     'p_discord',
+    'is_discord',
     'truth_discord',
+    'agreement',
   )
   rows = []
 
@@ -117,6 +119,9 @@ def _print_concord(variants, clusters, eta, sampnames, truth):
     sidx1, sidx2 = pair
     key = frozenset([sampnames[sidx] for sidx in pair])
     T = truth[key] if key in truth else 'NA'
+    # Multiplying by log10(e) converts the Bayes factor into base-10 log from the natural log.
+    log_bf = np.log10(np.e)*(logbf[pair][0] - logbf[pair][1])
+    is_discord = log_bf >= bf_threshold
 
     rows.append({
       'samp1': sampnames[sidx1],
@@ -124,12 +129,16 @@ def _print_concord(variants, clusters, eta, sampnames, truth):
       'jsd': jsd[pair],
       'm1_llh': logbf[pair][0],
       'm2_llh': logbf[pair][1],
-      'log_bf': logbf[pair][0] - logbf[pair][1],
+      'log_bf': log_bf,
       'p_discord': np.exp(logbf[pair][0] - scipy.special.logsumexp(logbf[pair])),
+      'is_discord': is_discord,
       'truth_discord': T,
+      'agreement': is_discord == T,
     })
 
-  rows = sorted(rows, key = lambda R: R['log_bf'])
+  if sort_by_bf:
+    rows = sorted(rows, key = lambda R: R['log_bf'])
+
   print(*fields, sep=',')
   for R in rows:
     for key in ('jsd', 'p_discord'):
