@@ -1,1 +1,168 @@
-{"clusters": [["s0", "s1", "s10", "s24", "s26", "s30", "s9"], ["s6"], ["s2", "s3", "s4", "s11", "s13", "s17", "s19", "s20", "s25", "s27", "s29", "s31", "s32"], ["s18"], ["s12", "s23", "s28"], ["s21", "s22"], ["s8"], ["s14"], ["s5", "s7", "s15", "s16"]], "garbage": [], "samples": ["Diagnosis", "dXeno 1", "dXeno 1 CNS", "dXeno 1 Spleen", "dXeno 2", "dXeno 2 Spleen", "dXeno 3", "dXeno 3 CNS", "dXeno 3 Spleen", "dXeno 4", "dXeno 4 CNS", "dXeno 4 Spleen", "dXeno 5", "dXeno 5 Spleen", "dXeno 6", "dXeno 6 CNS", "dXeno 6 Spleen", "dXeno 7", "dXeno 7 CNS", "dXeno 7 Spleen", "dXeno 8", "dXeno 8 CNS", "dXeno 8 Spleen", "dXeno 9", "dXeno 9 CNS", "dXeno 9 Spleen", "dXeno 10", "dXeno 10 Spleen", "dXeno 11", "dXeno 11 CNS", "dXeno 11 Spleen", "dXeno 12", "dXeno 12 Spleen", "Relapse", "rXeno 1", "rXeno 1 CNS", "rXeno 2", "rXeno 2 CNS", "rXeno 3", "rXeno 3 CNS", "rXeno 4", "rXeno 4 CNS", "rXeno 5", "rXeno 5 CNS", "rXeno 6", "rXeno 6 CNS", "rXeno 7", "rXeno 8", "rXeno 9", "rXeno 10", "rXeno 10 CNS", "rXeno 11", "rXeno 11 CNS", "rXeno 12", "rXeno 13", "rXeno 14", "rXeno 15", "rXeno 18"], "hidden_samples": ["dXeno 1 Spleen", "dXeno 2", "dXeno 2 Spleen", "dXeno 3 Spleen", "dXeno 4 Spleen", "dXeno 5", "dXeno 5 Spleen", "dXeno 6 Spleen", "dXeno 7 Spleen", "dXeno 8 Spleen", "dXeno 9 Spleen", "dXeno 10", "dXeno 10 Spleen", "dXeno 11 Spleen", "dXeno 12", "dXeno 12 Spleen", "rXeno 1", "rXeno 1 CNS", "rXeno 2", "rXeno 2 CNS", "rXeno 3", "rXeno 3 CNS", "rXeno 4", "rXeno 4 CNS", "rXeno 5", "rXeno 5 CNS", "rXeno 6", "rXeno 6 CNS", "rXeno 7", "rXeno 8", "rXeno 9", "rXeno 10", "rXeno 10 CNS", "rXeno 11", "rXeno 11 CNS", "rXeno 12", "rXeno 13", "rXeno 14", "rXeno 15", "rXeno 18"], "samp_colours": [["dXeno 11", "#b33300"], ["dXeno 11 CNS", "#009bb3"]]}
+{
+  "clusters": [
+    [
+      "s0",
+      "s1",
+      "s10",
+      "s24",
+      "s26",
+      "s30",
+      "s9"
+    ],
+    [
+      "s6"
+    ],
+    [
+      "s2",
+      "s3",
+      "s4",
+      "s11",
+      "s13",
+      "s17",
+      "s19",
+      "s20",
+      "s25",
+      "s27",
+      "s29",
+      "s31",
+      "s32"
+    ],
+    [
+      "s18"
+    ],
+    [
+      "s12",
+      "s23",
+      "s28"
+    ],
+    [
+      "s21",
+      "s22"
+    ],
+    [
+      "s8"
+    ],
+    [
+      "s14"
+    ],
+    [
+      "s5",
+      "s7",
+      "s15",
+      "s16"
+    ]
+  ],
+  "garbage": [],
+  "samples": [
+    "Diagnosis",
+    "dXeno 1 BM",
+    "dXeno 1 CNS",
+    "dXeno 1 Spleen",
+    "dXeno 2 BM",
+    "dXeno 2 Spleen",
+    "dXeno 3 BM",
+    "dXeno 3 CNS",
+    "dXeno 3 Spleen",
+    "dXeno 4 BM",
+    "dXeno 4 CNS",
+    "dXeno 4 Spleen",
+    "dXeno 5 BM",
+    "dXeno 5 Spleen",
+    "dXeno 6 BM",
+    "dXeno 6 CNS",
+    "dXeno 6 Spleen",
+    "dXeno 7 BM",
+    "dXeno 7 CNS",
+    "dXeno 7 Spleen",
+    "dXeno 8 BM",
+    "dXeno 8 CNS",
+    "dXeno 8 Spleen",
+    "dXeno 9 BM",
+    "dXeno 9 CNS",
+    "dXeno 9 Spleen",
+    "dXeno 10 BM",
+    "dXeno 10 Spleen",
+    "dXeno 11 BM",
+    "dXeno 11 CNS",
+    "dXeno 11 Spleen",
+    "dXeno 12 BM",
+    "dXeno 12 Spleen",
+    "Relapse",
+    "rXeno 1 BM",
+    "rXeno 1 CNS",
+    "rXeno 2 BM",
+    "rXeno 2 CNS",
+    "rXeno 3 BM",
+    "rXeno 3 CNS",
+    "rXeno 4 BM",
+    "rXeno 4 CNS",
+    "rXeno 5 BM",
+    "rXeno 5 CNS",
+    "rXeno 6 BM",
+    "rXeno 6 CNS",
+    "rXeno 7 BM",
+    "rXeno 8 BM",
+    "rXeno 9 BM",
+    "rXeno 10 BM",
+    "rXeno 10 CNS",
+    "rXeno 11 BM",
+    "rXeno 11 CNS",
+    "rXeno 12 BM",
+    "rXeno 13 BM",
+    "rXeno 14 BM",
+    "rXeno 15 BM",
+    "rXeno 18 BM"
+  ],
+  "hidden_samples": [
+    "dXeno 1 Spleen",
+    "dXeno 2 BM",
+    "dXeno 2 Spleen",
+    "dXeno 3 Spleen",
+    "dXeno 4 Spleen",
+    "dXeno 5 BM",
+    "dXeno 5 Spleen",
+    "dXeno 6 Spleen",
+    "dXeno 7 Spleen",
+    "dXeno 8 Spleen",
+    "dXeno 9 Spleen",
+    "dXeno 10 BM",
+    "dXeno 10 Spleen",
+    "dXeno 11 Spleen",
+    "dXeno 12 BM",
+    "dXeno 12 Spleen",
+    "rXeno 1 BM",
+    "rXeno 1 CNS",
+    "rXeno 2 BM",
+    "rXeno 2 CNS",
+    "rXeno 3 BM",
+    "rXeno 3 CNS",
+    "rXeno 4 BM",
+    "rXeno 4 CNS",
+    "rXeno 5 BM",
+    "rXeno 5 CNS",
+    "rXeno 6 BM",
+    "rXeno 6 CNS",
+    "rXeno 7 BM",
+    "rXeno 8 BM",
+    "rXeno 9 BM",
+    "rXeno 10 BM",
+    "rXeno 10 CNS",
+    "rXeno 11 BM",
+    "rXeno 11 CNS",
+    "rXeno 12 BM",
+    "rXeno 13 BM",
+    "rXeno 14 BM",
+    "rXeno 15 BM",
+    "rXeno 18 BM"
+  ],
+  "samp_colours": [
+    [
+      "dXeno 11 BM",
+      "#7a1bff"
+    ],
+    [
+      "dXeno 11 CNS",
+      "#ffbe1b"
+    ]
+  ]
+}
