@@ -1,29 +1,29 @@
 samp1,samp2,discord
-Diagnosis Xeno 1,Diagnosis Xeno 1 CNS,0
-Diagnosis Xeno 1,Diagnosis Xeno 1 Spleen,0
-Diagnosis Xeno 2,Diagnosis Xeno 2 Spleen,0
-Diagnosis Xeno 3,Diagnosis Xeno 3 CNS,0
-Diagnosis Xeno 3,Diagnosis Xeno 3 Spleen,0
-Diagnosis Xeno 4,Diagnosis Xeno 4 CNS,0
-Diagnosis Xeno 4,Diagnosis Xeno 4 Spleen,0
-Diagnosis Xeno 5,Diagnosis Xeno 5 Spleen,0
-Diagnosis Xeno 6,Diagnosis Xeno 6 CNS,1
-Diagnosis Xeno 6,Diagnosis Xeno 6 Spleen,0
-Diagnosis Xeno 7,Diagnosis Xeno 7 CNS,0
-Diagnosis Xeno 7,Diagnosis Xeno 7 Spleen,0
-Diagnosis Xeno 8,Diagnosis Xeno 8 CNS,0
-Diagnosis Xeno 8,Diagnosis Xeno 8 Spleen,0
-Diagnosis Xeno 9,Diagnosis Xeno 9 CNS,0
-Diagnosis Xeno 9,Diagnosis Xeno 9 Spleen,0
-Diagnosis Xeno 10,Diagnosis Xeno 10 Spleen,1
-Diagnosis Xeno 11,Diagnosis Xeno 11 CNS,0
-Diagnosis Xeno 11,Diagnosis Xeno 11 Spleen,0
-Diagnosis Xeno 12,Diagnosis Xeno 12 Spleen,0
-Relapse Xeno 1,Relapse Xeno 1 CNS,0
-Relapse Xeno 2,Relapse Xeno 2 CNS,1
-Relapse Xeno 3,Relapse Xeno 3 CNS,0
-Relapse Xeno 4,Relapse Xeno 4 CNS,1
-Relapse Xeno 5,Relapse Xeno 5 CNS,0
-Relapse Xeno 6,Relapse Xeno 6 CNS,0
-Relapse Xeno 10,Relapse Xeno 10 CNS,0
-Relapse Xeno 11,Relapse Xeno 11 CNS,0
+dXeno 1,dXeno 1 CNS,0
+dXeno 1,dXeno 1 Spleen,0
+dXeno 2,dXeno 2 Spleen,0
+dXeno 3,dXeno 3 CNS,0
+dXeno 3,dXeno 3 Spleen,0
+dXeno 4,dXeno 4 CNS,0
+dXeno 4,dXeno 4 Spleen,0
+dXeno 5,dXeno 5 Spleen,0
+dXeno 6,dXeno 6 CNS,1
+dXeno 6,dXeno 6 Spleen,0
+dXeno 7,dXeno 7 CNS,0
+dXeno 7,dXeno 7 Spleen,0
+dXeno 8,dXeno 8 CNS,0
+dXeno 8,dXeno 8 Spleen,0
+dXeno 9,dXeno 9 CNS,0
+dXeno 9,dXeno 9 Spleen,0
+dXeno 10,dXeno 10 Spleen,1
+dXeno 11,dXeno 11 CNS,0
+dXeno 11,dXeno 11 Spleen,0
+dXeno 12,dXeno 12 Spleen,0
+rXeno 1,rXeno 1 CNS,0
+rXeno 2,rXeno 2 CNS,1
+rXeno 3,rXeno 3 CNS,0
+rXeno 4,rXeno 4 CNS,1
+rXeno 5,rXeno 5 CNS,0
+rXeno 6,rXeno 6 CNS,0
+rXeno 10,rXeno 10 CNS,0
+rXeno 11,rXeno 11 CNS,0

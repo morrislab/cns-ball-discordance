@@ -95,8 +95,8 @@ def _calc_bayes_factors(variants, clusters, eta, pairs):
     logbf[pair] = (m1_llh, m2_llh)
   return logbf
 
-def _print_concord(variants, clusters, eta, sampnames, truth, bf_threshold=2, sort_by_bf=False):
-  pairs = _find_samp_pairs(sampnames)
+def _print_concord(variants, clusters, eta, sampnames, truth, bf_threshold=3, sort_by_bf=False):
+  pairs = _find_samp_pairs(sampnames, ' CNS') + _find_samp_pairs(sampnames, ' Spleen')
   jsd = _calc_concord_jsd(eta, pairs)
   logbf = _calc_bayes_factors(variants, clusters, eta, pairs)
 
