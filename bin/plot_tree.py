@@ -37,7 +37,8 @@ def write_header(runid, tidx, outf):
   print('<script src="https://d3js.org/d3.v5.min.js"></script>', file=outf)
   for jsfn in ('highlight_table_labels.js', 'tree_plotter.js'):
     print('<script>%s</script>' % _read_file(jsfn, PAIRTREE_RESOURCES), file=outf)
-  print('<script>%s</script>' % _read_file('eta_plotter.js'))
+  #print('<script>%s</script>' % _read_file('eta_plotter.js'), file=outf)
+  print('<script src=../../plot_resources/eta_plotter.js></script>', file=outf)
   print('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">', file=outf)
   for cssfn in ('tree.css', 'matrix.css'):
     print('<style type="text/css">%s</style>' % _read_file(cssfn, PAIRTREE_RESOURCES), file=outf)
@@ -89,9 +90,11 @@ def _write_tree_html(tree_data, tidx, visible_sampidxs, samp_colours, plot_phi, 
     ''' % _js_on_load('''
       if(results.visible_sampidxs !== null) {
         results.visible_phi = results.phi.map(function(P) { return results.visible_sampidxs.map(function(idx) { return P[idx]; }); });
+        results.visible_eta = results.eta.map(function(P) { return results.visible_sampidxs.map(function(idx) { return P[idx]; }); });
         results.visible_samps = results.visible_sampidxs.map(function(idx) { return results.samples[idx]; });
       } else {
         results.visible_phi = results.phi;
+        results.visible_eta = results.eta;
         results.visible_samps = results.samples;
       }
       (new PhiMatrix()).plot(results.visible_phi, results.visible_samps, '#phi_matrix');
@@ -114,6 +117,14 @@ def _write_tree_html(tree_data, tidx, visible_sampidxs, samp_colours, plot_phi, 
     <div id="phi_interleaved_matrix" class="container"><h2>Interleaved lineage frequencies</h2></div>
     %s
     ''' % _js_on_load('''(new PhiInterleavedMatrix()).plot(results.phi, results.phi_hat, results.samples, '#phi_interleaved_matrix');'''), file=outf)
+
+  print('''
+  <div id="eta_matrix" class="container"><h2>Population frequencies</h2></div>
+  %s
+  ''' % _js_on_load('''
+  (new EtaPlotter()).plot(results.visible_eta, results.visible_samps, '#eta_matrix');
+  '''), file=outf)
+
 
 def _reorder_subclones(data, params):
   old_to_new = {}
@@ -153,9 +164,6 @@ def _reorder_subclones(data, params):
     new_params['pop_colours'] = [new_params['pop_colours'][new_to_old[idx]] for idx in range(K)]
 
   return (new_data, new_params)
-
-def _plot_eta(struct, phi, sampnames, visible_sampidxs, outf):
-  pass
 
 def main():
   parser = argparse.ArgumentParser(
@@ -217,6 +225,9 @@ def main():
       supervars,
       data['samples'],
     )
+    eta = util.calc_eta(data['struct'], data['phi'])
+    tree_struct['eta'] = eta.tolist()
+
     _write_tree_html(
       tree_struct,
       args.tree_index,
@@ -226,13 +237,6 @@ def main():
       True,
       True,
       True,
-      outf,
-    )
-    _plot_eta(
-      data['struct'],
-      data['phi'],
-      data['samples'],
-      visible_sampidxs,
       outf,
     )
     vaf_plotter.plot_vaf_matrix(

@@ -56,7 +56,7 @@ function plot_clusters {
   for foo in $CLUSTRESULTDIR/clusters.conc.*/*.params.json; do
     runid=$(basename $foo | cut -d. -f1)
     echo "$PYTHON $PTDIR/bin/plotvars --plot-relations --parallel 1 $INDIR/$runid.ssm $foo $(dirname $foo)/$runid.clusters.html 2>&1"
-  done | parallel -j40 --halt 1 --eta | grep -v '^{'
+  done | parallel -j40 --halt 1 --eta | grep -v '^{' || true
 }
 
 function make_cluster_index {
@@ -88,22 +88,25 @@ function plot_trees {
 
   for resultfn in *.results.npz; do
     runid=$(basename $resultfn | cut -d. -f1)
-    for task in plottree summposterior; do
-      cmd="$PYTHON $PTDIR/bin/$task"
-      if [[ $task == plottree ]]; then
-        cmd+=" --reorder-subclones"
-      fi
-      if [[ $task == plottree && -v "TREE_INDICES[$runid]" ]]; then
-        cmd+=" --tree-index ${TREE_INDICES[$runid]}"
-      fi
-      cmd+=" --runid $runid"
-      cmd+=" $INDIR/$runid.ssm"
-      cmd+=" $INDIR/${runid}.collapsed.params.json"
-      cmd+=" $TREERESULTDIR/${runid}.results.npz"
-      cmd+=" $TREERESULTDIR/${runid}.${task}.html"
-      echo $cmd
-    done
-  done | parallel -j40 --halt 1 --eta
+    args="--runid $runid"
+    args+=" $INDIR/$runid.ssm"
+    args+=" $INDIR/${runid}.collapsed.params.json"
+    args+=" $TREERESULTDIR/${runid}.results.npz"
+
+    cmd="$PYTHON $BASEDIR/bin/plot_tree.py"
+    cmd+=" --reorder-subclones"
+    if [[ -v "TREE_INDICES[$runid]" ]]; then
+      cmd+=" --tree-index ${TREE_INDICES[$runid]}"
+    fi
+    cmd+=" $args"
+    cmd+=" $TREERESULTDIR/${runid}.plottree.html"
+    echo $cmd
+
+    cmd="$PYTHON $PTDIR/bin/summposterior"
+    cmd+=" $args"
+    cmd+=" $TREERESULTDIR/${runid}.summposterior.html"
+    echo $cmd
+  done | parallel -j40 --halt 2 --eta
 }
 
 function make_tree_index {
@@ -154,11 +157,11 @@ function main {
   #make_cluster_index
 
   #run_pairtree
-  #plot_trees
+  plot_trees
 
-  calc_discord
-  make_tree_index
-  add_discord_to_index
+  #calc_discord
+  #make_tree_index
+  #add_discord_to_index
 }
 
 main
