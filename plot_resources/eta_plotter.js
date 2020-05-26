@@ -107,14 +107,37 @@ EtaPlotter.prototype._add_pop_legend = function(svg, pop_labels, pop_colours, x_
     .text(function(d) { return d; });
 }
 
-EtaPlotter.prototype.plot = function(eta, samp_labels, container) {
+EtaPlotter.prototype._remove_small_pops = function(eta, pop_labels, threshold) {
+  let K = eta.length;
+  let S = eta[0].length;
+
+  for(let k = K - 1; k >= 0; k--) {
+    let remove_k = true;
+    for(let s = 0; s < S; s++) {
+      if(eta[k][s] >= threshold) {
+        remove_k = false;
+        break;
+      }
+    }
+    if(remove_k) {
+      eta.splice(k, 1);
+      pop_labels.splice(k, 1);
+    }
+  }
+}
+
+EtaPlotter.prototype.plot = function(eta, samp_labels, container, remove_small_pop_threshold=0.01) {
   let self = this;
+  let pop_labels =  Array.from(Array(eta.length).keys()).map(idx => 'Pop. ' + idx);
+  if(remove_small_pop_threshold > 0) {
+    this._remove_small_pops(eta, pop_labels, remove_small_pop_threshold);
+  }
+
   let K = eta.length;
   let S = eta[0].length;
   let K_range = Array.from(Array(K).keys());
   let S_range = Array.from(Array(S).keys());
 
-  let pop_labels =  K_range.map(idx => 'Pop. ' + idx);
   let pop_colours = ColourAssigner.assign_colours(K);
   let pop_label_width = this._calc_label_width(pop_labels);
   let col_label_height = this._calc_label_width(samp_labels);

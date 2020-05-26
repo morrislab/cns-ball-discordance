@@ -122,7 +122,7 @@ def _write_tree_html(tree_data, tidx, visible_sampidxs, samp_colours, plot_phi, 
   <div id="eta_matrix" class="container"><h2>Population frequencies</h2></div>
   %s
   ''' % _js_on_load('''
-  (new EtaPlotter()).plot(results.visible_eta, results.visible_samps, '#eta_matrix');
+  (new EtaPlotter()).plot(results.visible_eta, results.visible_samps, '#eta_matrix', 0);
   '''), file=outf)
 
 
