@@ -15,14 +15,16 @@ def _convert_clustering_to_assignment(clusters):
   assign = np.array([mapping[vid] for vid in vids], dtype=np.int32)
   return (vids, assign)
 
-def _find_samp_pairs(sampnames, tail=' CNS'):
+def _find_samp_pairs(sampnames, tail1, tail2):
   pairs = []
   for idx1, samp in enumerate(sampnames):
-    if not samp.endswith(tail):
+    if not samp.endswith(tail1):
       continue
-    other = samp[:-len(tail)]
+    other = samp[:-len(tail1)] + tail2
+    if other not in sampnames:
+      continue
     idx2 = sampnames.index(other)
-    pairs.append((idx2, idx1))
+    pairs.append((idx1, idx2))
   return pairs
 
 def _calc_kld(P, Q):
@@ -95,8 +97,8 @@ def _calc_bayes_factors(variants, clusters, eta, pairs):
     logbf[pair] = (m1_llh, m2_llh)
   return logbf
 
-def _print_concord(variants, clusters, eta, sampnames, truth, bf_threshold=3, sort_by_bf=False):
-  pairs = _find_samp_pairs(sampnames, ' CNS') + _find_samp_pairs(sampnames, ' Spleen')
+def _print_concord(variants, clusters, eta, sampnames, truth, bf_threshold=2, sort_by_bf=False):
+  pairs = _find_samp_pairs(sampnames, ' BM', ' CNS') + _find_samp_pairs(sampnames, ' BM', ' Spleen')
   jsd = _calc_concord_jsd(eta, pairs)
   logbf = _calc_bayes_factors(variants, clusters, eta, pairs)
 
