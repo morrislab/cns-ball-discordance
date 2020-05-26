@@ -93,7 +93,7 @@ function plot_trees {
     args+=" $INDIR/${runid}.collapsed.params.json"
     args+=" $TREERESULTDIR/${runid}.results.npz"
 
-    cmd="$PYTHON $BASEDIR/bin/plot_tree.py"
+    cmd="$PYTHON $PTDIR/bin/plottree"
     cmd+=" --reorder-subclones"
     if [[ -v "TREE_INDICES[$runid]" ]]; then
       cmd+=" --tree-index ${TREE_INDICES[$runid]}"
@@ -116,7 +116,7 @@ function make_tree_index {
     echo "<table>"
     for resultfn in *.results.npz; do
       runid=$(basename $resultfn | cut -d. -f1)
-      echo "<tr><td>$runid</td><td><a href=${runid}.plottree.html>tree</a></td><td><a href=${runid}.summposterior.html>summary</a></td></tr>"
+      echo "<tr><td>$runid</td><td><a href=${runid}.stephtree.html>tree</a></td><td><a href=${runid}.summposterior.html>summary</a></td></tr>"
     done
     echo "</table>"
   ) > index.html
@@ -150,6 +150,27 @@ function add_discord_to_index {
   ) >> index.html
 }
 
+function plot_steph_trees {
+  cd $TREERESULTDIR
+
+  for resultfn in *.results.npz; do
+    runid=$(basename $resultfn | cut -d. -f1)
+
+    cmd="$PYTHON $BASEDIR/bin/plot_steph_tree.py"
+    cmd+=" --reorder-subclones"
+    if [[ -v "TREE_INDICES[$runid]" ]]; then
+      cmd+=" --tree-index ${TREE_INDICES[$runid]}"
+    fi
+    cmd+=" --runid $runid"
+    cmd+=" $INDIR/$runid.ssm"
+    cmd+=" $INDIR/${runid}.collapsed.params.json"
+    cmd+=" $TREERESULTDIR/${runid}.results.npz"
+    cmd+=" $TREERESULTDIR/${runid}.discord.csv"
+    cmd+=" $TREERESULTDIR/${runid}.stephtree.html"
+    echo $cmd
+  done | parallel -j40 --halt 2 --eta
+}
+
 function main {
   #compute_clusters
   #compare_cluster_count
@@ -157,11 +178,13 @@ function main {
   #make_cluster_index
 
   #run_pairtree
-  plot_trees
+  #plot_trees
 
   #calc_discord
-  #make_tree_index
-  #add_discord_to_index
+  plot_steph_trees
+  make_tree_index
+  add_discord_to_index
+
 }
 
 main

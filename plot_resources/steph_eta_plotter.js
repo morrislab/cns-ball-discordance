@@ -1,4 +1,4 @@
-function EtaPlotter() {
+function StephEtaPlotter() {
   this._bar_width = 50;
   this._bar_height = 500;
   this._legend_spacing = 60;
@@ -11,7 +11,7 @@ function EtaPlotter() {
   this._col_space = 10;
 }
 
-EtaPlotter.prototype._calc_label_width = function(labels) {
+StephEtaPlotter.prototype._calc_label_width = function(labels) {
   var max_length = 0;
   var char_width = 15;
   for(let label of labels) {
@@ -22,7 +22,7 @@ EtaPlotter.prototype._calc_label_width = function(labels) {
   return char_width * max_length;
 }
 
-EtaPlotter.prototype._calc_cum = function(mat) {
+StephEtaPlotter.prototype._calc_cum = function(mat) {
   var K = mat.length;
   var S = mat[0].length;
   var S_range = Array.from(Array(S).keys());
@@ -34,7 +34,7 @@ EtaPlotter.prototype._calc_cum = function(mat) {
   return cum;
 }
 
-EtaPlotter.prototype._plot_etas = function(svg, eta, samp_labels, col_spacing, pop_colours, col_label_height) {
+StephEtaPlotter.prototype._plot_etas = function(svg, eta, samp_labels, col_spacing, pop_colours, col_label_height) {
   let self = this;
   let K = eta.length;
   let S = eta[0].length;
@@ -82,7 +82,7 @@ EtaPlotter.prototype._plot_etas = function(svg, eta, samp_labels, col_spacing, p
     .attr('fill', function(d, i) { return pop_colours[i]; });
 }
 
-EtaPlotter.prototype._add_pop_legend = function(svg, pop_labels, pop_colours, x_offset, y_offset) {
+StephEtaPlotter.prototype._add_pop_legend = function(svg, pop_labels, pop_colours, x_offset, y_offset) {
   let self = this;
   let legend = svg.append('svg:g')
     .attr('transform', 'translate(' + x_offset + ',' + y_offset + ')')
@@ -107,7 +107,7 @@ EtaPlotter.prototype._add_pop_legend = function(svg, pop_labels, pop_colours, x_
     .text(function(d) { return d; });
 }
 
-EtaPlotter.prototype._remove_small_pops = function(eta, pop_labels, threshold) {
+StephEtaPlotter.prototype._remove_small_pops = function(eta, pop_labels, threshold) {
   let K = eta.length;
   let S = eta[0].length;
 
@@ -126,7 +126,7 @@ EtaPlotter.prototype._remove_small_pops = function(eta, pop_labels, threshold) {
   }
 }
 
-EtaPlotter.prototype.plot = function(eta, samp_labels, container, remove_small_pop_threshold=0.01) {
+StephEtaPlotter.prototype.plot = function(eta, samp_labels, container, remove_small_pop_threshold=0.01) {
   let self = this;
   let pop_labels =  Array.from(Array(eta.length).keys()).map(idx => 'Pop. ' + idx);
   if(remove_small_pop_threshold > 0) {
