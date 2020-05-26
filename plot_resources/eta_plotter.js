@@ -1,9 +1,14 @@
 function EtaPlotter() {
   this._bar_width = 50;
-  this._bar_height = 600;
+  this._bar_height = 500;
   this._legend_spacing = 60;
   this._font_size = '16px';
+  this._legend_font_size = '14px';
   this._label_padding = 10;
+  this._legend_splotch_size = 30;
+  this._legend_splotch_padding = 5;
+  this._legend_splotch_spacing = 20;
+  this._col_space = 10;
 }
 
 EtaPlotter.prototype._calc_label_width = function(labels) {
@@ -29,7 +34,7 @@ EtaPlotter.prototype._calc_cum = function(mat) {
   return cum;
 }
 
-EtaPlotter.prototype._plot_etas = function(svg, eta, samp_labels, col_label_height) {
+EtaPlotter.prototype._plot_etas = function(svg, eta, samp_labels, col_spacing, pop_colours, col_label_height) {
   let self = this;
   let K = eta.length;
   let S = eta[0].length;
@@ -41,12 +46,17 @@ EtaPlotter.prototype._plot_etas = function(svg, eta, samp_labels, col_label_heig
     throw "Wrong number of samp labels";
   }
 
+  let cum_col_spacing = [0].concat(col_spacing);
+  for(var idx = 1; idx < cum_col_spacing.length; idx++) {
+    cum_col_spacing[idx] += cum_col_spacing[idx - 1];
+  }
+
   let cl = svg.append('svg:g')
-    .attr('transform', function(d, i) { return 'translate(' + (0.5 * self._bar_width) + ',' + (col_label_height - self._label_padding) + ')'; })
+    .attr('transform', 'translate(' + (0.5 * self._bar_width) + ',' + (col_label_height - self._label_padding) + ')')
     .selectAll('text')
     .data(samp_labels)
     .join('svg:text')
-    .attr('transform', function(d, i) { return 'translate(' + i * self._bar_width + ',0) rotate(270)'; })
+    .attr('transform', function(d, i) { return 'translate(' + (i*self._bar_width + cum_col_spacing[i]) + ',0) rotate(270)'; })
     .attr('x', 0)
     .attr('y', 0)
     .attr('font-size', this._font_size)
@@ -57,9 +67,10 @@ EtaPlotter.prototype._plot_etas = function(svg, eta, samp_labels, col_label_heig
     .data(S_range)
     .join('svg:g')
     .attr('class', 'col')
-    .attr('transform', function(d, i) { return 'translate(' + i*self._bar_width + ',' + col_label_height + ')'; });
+    .attr('transform', function(d, i) {
+      return 'translate(' + (i*self._bar_width + cum_col_spacing[i]) + ',' + col_label_height + ')';
+    });
 
-  let pop_colours = ColourAssigner.assign_colours(K);
   cols.selectAll('rect')
     .data(function(sidx) { return K_range.map(function(k) { return {k: k, s: sidx}; }); })
     .join('svg:rect')
@@ -71,23 +82,71 @@ EtaPlotter.prototype._plot_etas = function(svg, eta, samp_labels, col_label_heig
     .attr('fill', function(d, i) { return pop_colours[i]; });
 }
 
-EtaPlotter.prototype._add_pop_legend = function(svg, K, col_label_height) {
-  let K_range = Array.from(Array(K).keys());
-  let pop_labels =  K_range.map(idx => 'Pop. ' + idx);
-  if(pop_labels.length !== K) {
-    throw "Wrong number of pop labels";
-  }
+EtaPlotter.prototype._add_pop_legend = function(svg, pop_labels, pop_colours, x_offset, y_offset) {
+  let self = this;
+  let legend = svg.append('svg:g')
+    .attr('transform', 'translate(' + x_offset + ',' + y_offset + ')')
+    .selectAll('g.label')
+    .data(pop_labels)
+    .join('svg:g')
+    .attr('transform', function(d, i) { return 'translate(0,' + i*self._legend_splotch_size + ')'; })
+    .attr('class', 'label');
+  legend
+    .append('svg:rect')
+    .attr('width', this._legend_splotch_size)
+    .attr('height', this._legend_splotch_size)
+    .attr('x', 0)
+    .attr('y', -0.5*this._legend_splotch_size)
+    .attr('fill-opacity', 1.0)
+    .attr('fill', function(d, i) { return pop_colours[i]; });
+  legend
+    .append('svg:text')
+    .attr('font-size', this._legend_font_size)
+    .attr('x', this._legend_splotch_size + this._legend_splotch_padding)
+    .attr('dominant-baseline', 'central')
+    .text(function(d) { return d; });
 }
 
 EtaPlotter.prototype.plot = function(eta, samp_labels, container) {
+  let self = this;
   let K = eta.length;
   let S = eta[0].length;
+  let K_range = Array.from(Array(K).keys());
+  let S_range = Array.from(Array(S).keys());
+
+  let pop_labels =  K_range.map(idx => 'Pop. ' + idx);
+  let pop_colours = ColourAssigner.assign_colours(K);
+  let pop_label_width = this._calc_label_width(pop_labels);
   let col_label_height = this._calc_label_width(samp_labels);
+  let col_spacing = S_range.slice(0, -1).map(s => self._col_space);
+  let total_col_spacing = col_spacing.reduce((sum, cur) => sum + cur, 0);
 
+  let legend_x_offset = S*this._bar_width + this._legend_splotch_spacing + total_col_spacing;
+  let legend_y_offset = col_label_height + 0.5*this._legend_splotch_size;
+  let legend_width = this._legend_splotch_size + this._legend_splotch_padding + pop_label_width;
+
+  let canvas_width = legend_x_offset + legend_width;
+  let canvas_height = Math.max(
+    col_label_height + this._label_padding + this._bar_height,
+    legend_y_offset + K*this._legend_splotch_size,
+  );
   let svg = d3.select(container).append('svg:svg')
-    .attr('width', S * this._bar_width)
-    .attr('height', col_label_height + this._label_padding + this._bar_height);
+    .attr('width', canvas_width)
+    .attr('height', canvas_height);
 
-  this._plot_etas(svg, eta, samp_labels, col_label_height);
-  this._add_pop_legend(svg, K, col_label_height);
+  this._plot_etas(
+    svg,
+    eta,
+    samp_labels,
+    col_spacing,
+    pop_colours,
+    col_label_height
+  );
+  this._add_pop_legend(
+    svg,
+    pop_labels,
+    pop_colours,
+    legend_x_offset,
+    legend_y_offset
+  );
 }
