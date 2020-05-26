@@ -19,6 +19,8 @@ import json
 import util
 import plotutil
 
+import csv
+
 def _choose_colours(N):
   import plotly.colors
   colours = plotly.colors.qualitative.Dark24
@@ -42,7 +44,8 @@ def write_header(runid, tidx, outf):
     print('<script type="text/javascript">%s</script>' % plotutil.read_file(jsfn), file=outf)
 
   basedir = os.path.join(os.path.dirname(__file__), '..', 'plot_resources')
-  print('<script type="text/javascript">%s</script>' % plotutil.read_file('steph_eta_plotter.js', basedir), file=outf)
+  #print('<script type="text/javascript">%s</script>' % plotutil.read_file('steph_eta_plotter.js', basedir), file=outf)
+  print('<script type="text/javascript" src=../../plot_resources/steph_eta_plotter.js></script>', file=outf)
 
   print('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">', file=outf)
   for cssfn in ('tree.css', 'matrix.css'):
@@ -102,7 +105,7 @@ def _write_tree_html(tree_data, tidx, visible_sampidxs, samp_colours, pop_colour
   <div id="steph_eta_matrix" class="container"><h2>Steph population frequencies</h2></div>
   %s
   ''' % plotutil.js_on_load('''
-  (new StephEtaPlotter()).plot(results.visible_eta, results.visible_samps, '#steph_eta_matrix', 0);
+  (new StephEtaPlotter()).plot(results.visible_eta, results.visible_samps, results.discord, '#steph_eta_matrix', 0);
   '''), file=outf)
 
   if plot_eta:
@@ -218,6 +221,13 @@ def _reorder_subclones(data, params):
 
   return (new_data, new_params)
 
+def _parse_discord(discordfn):
+  with open(discordfn) as F:
+    reader = csv.DictReader(F)
+    rows = list(reader)
+  discord = [(row['samp1'], row['samp2'], row['p_discord']) for row in rows]
+  return discord
+
 def main():
   all_plot_choices = set((
     'tree',
@@ -264,6 +274,7 @@ def main():
   results = resultserializer.Results(args.pairtree_fn)
   variants = inputparser.load_ssms(args.ssm_fn)
   params = inputparser.load_params(args.params_fn)
+  discord = _parse_discord(args.discord_fn)
 
   data = {K: results.get(K)[args.tree_index] for K in (
     'struct',
@@ -309,6 +320,7 @@ def main():
         supervars,
         data['samples'],
       )
+      tree_struct['discord'] = discord
       _write_tree_html(
         tree_struct,
         args.tree_index,

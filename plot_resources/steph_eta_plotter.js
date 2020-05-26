@@ -8,7 +8,7 @@ function StephEtaPlotter() {
   this._legend_splotch_size = 30;
   this._legend_splotch_padding = 5;
   this._legend_splotch_spacing = 20;
-  this._col_space = 10;
+  this._col_space = 5;
 }
 
 StephEtaPlotter.prototype._calc_label_width = function(labels) {
@@ -126,7 +126,7 @@ StephEtaPlotter.prototype._remove_small_pops = function(eta, pop_labels, thresho
   }
 }
 
-StephEtaPlotter.prototype.plot = function(eta, samp_labels, container, remove_small_pop_threshold=0.01) {
+StephEtaPlotter.prototype.plot = function(eta, samp_labels, discord, container, remove_small_pop_threshold=0.01) {
   let self = this;
   let pop_labels =  Array.from(Array(eta.length).keys()).map(idx => 'Pop. ' + idx);
   if(remove_small_pop_threshold > 0) {
@@ -141,7 +141,21 @@ StephEtaPlotter.prototype.plot = function(eta, samp_labels, container, remove_sm
   let pop_colours = ColourAssigner.assign_colours(K);
   let pop_label_width = this._calc_label_width(pop_labels);
   let col_label_height = this._calc_label_width(samp_labels);
-  let col_spacing = S_range.slice(0, -1).map(s => self._col_space);
+
+  let big_col_space = 4*this._col_space;
+  let col_spacing = [];
+  for(let s = 0; s < S - 1; s++) {
+    let s1 = samp_labels[s];
+    let s2 = samp_labels[s+1];
+    let is_pair = false;
+    for(let d = 0; d < discord.length; d++) {
+      if(discord[d][0] === s1 && discord[d][1] === s2) {
+        is_pair = true;
+        break;
+      }
+    }
+    col_spacing.push(is_pair ? this._col_space : big_col_space);
+  }
   let total_col_spacing = col_spacing.reduce((sum, cur) => sum + cur, 0);
 
   let legend_x_offset = S*this._bar_width + this._legend_splotch_spacing + total_col_spacing;
