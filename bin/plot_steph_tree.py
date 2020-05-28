@@ -100,19 +100,13 @@ def _write_tree_html(tree_data, tidx, visible_sampidxs, samp_colours, pop_colour
     );
   ''' % tidx), file=outf)
 
-  print('''
-  <div id="steph_eta_matrix" class="container"><h2>Steph population frequencies</h2></div>
-  %s
-  ''' % plotutil.js_on_load('''
-  (new StephEtaPlotter()).plot(results.visible_eta, results.visible_samps, results.discord, '#steph_eta_matrix', 0, true);
-  '''), file=outf)
 
   if plot_eta:
     print('''
-    <div id="eta_matrix" class="container"><h2>Population frequencies</h2></div>
+    <div id="steph_eta_matrix" class="container"><h2>Steph population frequencies</h2></div>
     %s
     ''' % plotutil.js_on_load('''
-    (new EtaPlotter()).plot(results.visible_eta, results.visible_samps, '#eta_matrix', 0);
+    (new StephEtaPlotter()).plot(results.visible_eta, results.visible_samps, results.discord, '#steph_eta_matrix', 0, true);
     '''), file=outf)
 
   if plot_phi:

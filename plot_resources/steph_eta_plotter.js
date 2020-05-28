@@ -52,8 +52,6 @@ StephEtaPlotter.prototype._plot_etas = function(svg, eta, samp_labels, col_width
   let K_range = Array.from(Array(K).keys());
   let S_range = Array.from(Array(S).keys());
   let eta_cum = this._calc_cum_on_axis0(eta);
-  console.log(col_spacing);
-  console.log(col_widths);
   let cum_col_spacing = this._calc_cum(col_spacing);
   let cum_col_widths = this._calc_cum(col_widths);
 
@@ -193,7 +191,6 @@ StephEtaPlotter.prototype._plot_discord = function(svg, discord_pairs, col_label
     discord_pairs[d].x_offset = cum_col_width[s1] + cum_col_spacing[s1];
     discord_pairs[d].width = col_widths[s1] + col_widths[s2] + col_spacing[s1];
   }
-  console.log(discord_pairs);
 
   let elems = svg.append('svg:g')
     .attr('class', 'discord_bars')
@@ -223,7 +220,6 @@ StephEtaPlotter.prototype._ramp = function(colour, n = 256) {
 
 StephEtaPlotter.prototype._make_discord_legend = function(svg, colour, x_offset, y_offset) {
   let scale = d3.scaleSequential([0, 100], colour);
-  console.log([scale, scale.domain, scale.range, scale.interpolator]);
 
   let legend = svg.append('svg:g')
     .attr('class', 'discord_legend')
@@ -248,6 +244,18 @@ StephEtaPlotter.prototype._make_discord_legend = function(svg, colour, x_offset,
     ).call(g => g.selectAll('text').attr('font-size', this._legend_font_size));
 }
 
+StephEtaPlotter.prototype._renormalize_eta = function(eta) {
+  let K = eta.length;
+  let S = eta[0].length;
+
+  for(let s = 0; s < S; s++) {
+    let eta_s_sum = eta.reduce((sum, cur) => sum + cur[s], 0);
+    for(let k = 0; k < K; k++) {
+      eta[k][s] /= eta_s_sum;
+    }
+  }
+}
+
 StephEtaPlotter.prototype.plot = function(eta, samp_labels, discord, container, remove_small_pop_threshold=0.01, remove_pop0=false) {
   let self = this;
   let pop_labels =  Array.from(Array(eta.length).keys()).map(idx => 'Pop. ' + idx);
@@ -258,6 +266,7 @@ StephEtaPlotter.prototype.plot = function(eta, samp_labels, discord, container, 
   if(remove_small_pop_threshold > 0) {
     this._remove_small_pops(eta, pop_labels, remove_small_pop_threshold);
   }
+  this._renormalize_eta(eta);
 
   let K = eta.length;
   let S = eta[0].length;
