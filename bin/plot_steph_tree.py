@@ -105,7 +105,7 @@ def _write_tree_html(tree_data, tidx, visible_sampidxs, samp_colours, pop_colour
   <div id="steph_eta_matrix" class="container"><h2>Steph population frequencies</h2></div>
   %s
   ''' % plotutil.js_on_load('''
-  (new StephEtaPlotter()).plot(results.visible_eta, results.visible_samps, results.discord, '#steph_eta_matrix', 0);
+  (new StephEtaPlotter()).plot(results.visible_eta, results.visible_samps, results.discord, '#steph_eta_matrix', 0, true);
   '''), file=outf)
 
   if plot_eta:
@@ -225,7 +225,7 @@ def _parse_discord(discordfn):
   with open(discordfn) as F:
     reader = csv.DictReader(F)
     rows = list(reader)
-  discord = [(row['samp1'], row['samp2'], row['p_discord']) for row in rows]
+  discord = [(row['samp1'], row['samp2'], float(row['p_discord'])) for row in rows]
   return discord
 
 def main():
@@ -290,7 +290,7 @@ def main():
   if args.reorder_subclones:
     data, params = _reorder_subclones(data, params)
 
-  if 'hidden_samples' in params:
+  if False and 'hidden_samples' in params:
     hidden = set(params['hidden_samples'])
     assert hidden.issubset(set(data['samples'])) and len(hidden) < len(data['samples'])
     visible_sampidxs = [idx for idx, samp in enumerate(data['samples']) if samp not in hidden]
