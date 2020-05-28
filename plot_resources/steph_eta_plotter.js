@@ -87,7 +87,7 @@ StephEtaPlotter.prototype._plot_etas = function(svg, eta, samp_labels, col_width
     .data(function(sidx) { return K_range.map(function(k) { return {k: k, s: sidx}; }); })
     .join('svg:rect')
     .attr('width', d => col_widths[d.s])
-    .attr('height', function(d) { return eta[d.k][d.s] * self._col_height; })
+    .attr('height', function(d) { let ret = eta[d.k][d.s] * self._col_height; if(samp_labels[d.s] == 'rXeno 11 BM') console.log([d.k, eta[d.k][d.s], ret]); return ret; })
     .attr('x', 0)
     .attr('y', function(d, i) { return eta_cum[d.k][d.s] * self._col_height; })
     .attr('fill-opacity', function(d) { return 1.0; })
@@ -288,14 +288,7 @@ StephEtaPlotter.prototype.plot = function(eta, samp_labels, discord, container, 
   let legend_y_offset = col_label_height + this._discord_height + this._discord_spacing + 0.5*this._legend_splotch_size;
   let legend_width = this._legend_splotch_size + this._legend_padding + pop_label_width;
 
-  let canvas_width = legend_x_offset + legend_width;
-  let canvas_height = Math.max(
-    col_label_height + this._label_padding + this._col_height,
-    legend_y_offset + K*this._legend_splotch_size,
-  );
-  let svg = d3.select(container).append('svg:svg')
-    .attr('width', canvas_width)
-    .attr('height', canvas_height);
+  let svg = d3.select(container).append('svg:svg');
 
   let discord_colour = d3.interpolateViridis;
   this._plot_etas(
@@ -328,4 +321,6 @@ StephEtaPlotter.prototype.plot = function(eta, samp_labels, discord, container, 
     legend_x_offset,
     col_label_height,
   );
+
+  resize_svg(svg);
 }
