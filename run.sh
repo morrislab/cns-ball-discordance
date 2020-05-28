@@ -184,7 +184,6 @@ function main {
   plot_steph_trees
   make_tree_index
   add_discord_to_index
-
 }
 
 main
