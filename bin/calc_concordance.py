@@ -2,12 +2,15 @@ import argparse
 import numpy as np
 import numpy.ma as ma
 import scipy.special
+import scipy.stats
 import csv
+import json
 
 import common
 import inputparser
 import resultserializer
 import util
+import diversity_indices as di
 
 def _convert_clustering_to_assignment(clusters):
   mapping = {vid: cidx for cidx, cluster in enumerate(clusters) for vid in cluster}
@@ -97,8 +100,7 @@ def _calc_bayes_factors(variants, clusters, eta, pairs):
     logbf[pair] = (m1_llh, m2_llh)
   return logbf
 
-def _print_concord(variants, clusters, eta, sampnames, truth, bf_threshold=2, sort_by_bf=False):
-  pairs = _find_samp_pairs(sampnames, ' BM', ' CNS') + _find_samp_pairs(sampnames, ' BM', ' Spleen')
+def _calc_concord(variants, clusters, eta, sampnames, pairs, truth, bf_threshold=2):
   jsd = _calc_concord_jsd(eta, pairs)
   logbf = _calc_bayes_factors(variants, clusters, eta, pairs)
 
@@ -133,19 +135,41 @@ def _print_concord(variants, clusters, eta, sampnames, truth, bf_threshold=2, so
       'm2_llh': logbf[pair][1],
       'log_bf': log_bf,
       'p_discord': np.exp(logbf[pair][0] - scipy.special.logsumexp(logbf[pair])),
-      'is_discord': is_discord,
-      'truth_discord': T,
-      'agreement': is_discord == T,
+      'is_discord': bool(is_discord),
+      'truth_discord': bool(T),
+      'agreement': bool(is_discord == T),
     })
 
-  if sort_by_bf:
-    rows = sorted(rows, key = lambda R: R['log_bf'])
 
-  print(*fields, sep=',')
-  for R in rows:
-    for key in ('jsd', 'p_discord'):
-      R[key] = '%.3f' % R[key]
-    print(*[R[key] for key in fields], sep=',')
+  return rows
+
+def _compare_di(eta, clusters, struct, sampnames, pairs):
+  didxs = {
+    'cdi': di.calc_cdi(eta),
+    'cmdi': di.calc_cmdi(eta, clusters, struct),
+  }
+  s1 = [p[0] for p in pairs]
+  s2 = [p[1] for p in pairs]
+  assert len(s1) == len(s2) > 0
+
+  results = {
+    'S1': [sampnames[idx] for idx in s1],
+    'S2': [sampnames[idx] for idx in s2],
+  }
+  for name, val in didxs.items():
+    results[name] = {}
+    for alt in ('two-sided', 'greater', 'less'):
+      stat, pval = scipy.stats.wilcoxon(
+        [val[idx] for idx in s1],
+        [val[idx] for idx in s2],
+        mode = 'exact',
+        alternative = alt,
+      )
+      results[name][alt] = {
+        'stat': stat,
+        'pval': pval,
+      }
+  return results
 
 def _parse_truth(truthfn):
   truth = {}
@@ -182,7 +206,22 @@ def main():
   assert len(sampnames) == S
   eta = util.calc_eta(struct, phi)
 
-  _print_concord(variants, clusters, eta, sampnames, truth)
+  cns_pairs = _find_samp_pairs(sampnames, ' BM', ' CNS')
+  spleen_pairs = _find_samp_pairs(sampnames, ' BM', ' Spleen')
+  all_pairs = cns_pairs + spleen_pairs
+
+  concord = _calc_concord(variants, clusters, eta, sampnames, all_pairs, truth)
+  di_cmp = {}
+  for name, pairs in (('cns', cns_pairs), ('spleen', spleen_pairs)):
+    if len(pairs) == 0:
+      continue
+    di_cmp[name] = _compare_di(eta, clusters, struct, sampnames, pairs)
+
+  results = {
+    'concord': concord,
+    'di_pairs': di_cmp,
+  }
+  print(json.dumps(results))
 
 if __name__ == '__main__':
   main()
