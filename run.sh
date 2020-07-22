@@ -13,8 +13,7 @@ PARALLEL=10
 NCHAINS=10
 PYTHON=$HOME/.apps/bin/python3
 
-declare -A TREE_INDICES
-TREE_INDICES=( ["SJBALL031"]=1 )
+declare -A TREE_INDICES=( ["SJBALL031"]=1 )
 
 function compute_clusters {
   for conc in $(seq -10 3); do
@@ -95,7 +94,12 @@ function plot_trees {
 
     cmd="$PYTHON $PTDIR/bin/plottree"
     cmd+=" --reorder-subclones"
-    if [[ -v "TREE_INDICES[$runid]" ]]; then
+    cmd+=" --remove-normal"
+    # The below works on my laptop's Bash, but magically stopped working on
+    # SciNet after they apparently upgraded to Bash 4.2.46(2)-release.
+    #if [[ -v "TREE_INDICES[$runid]" ]]; then
+    # Do this stupid hackey alternative instead.
+    if [[ ${TREE_INDICES[$runid]+abc} ]]; then
       cmd+=" --tree-index ${TREE_INDICES[$runid]}"
     fi
     cmd+=" $args"
@@ -116,26 +120,25 @@ function make_tree_index {
     echo "<table>"
     for resultfn in *.results.npz; do
       runid=$(basename $resultfn | cut -d. -f1)
-      echo "<tr><td>$runid</td><td><a href=${runid}.stephtree.html>tree</a></td><td><a href=${runid}.summposterior.html>summary</a></td></tr>"
+      echo "<tr><td>$runid</td><td><a href=${runid}.plottree.html>orig tree</a></td><td><a href=${runid}.stephtree.html>tree with concord</a></td><td><a href=${runid}.summposterior.html>summary</a></td></tr>"
     done
     echo "</table>"
   ) > index.html
 }
 
-function calc_discord {
-  cd $TREERESULTDIR
-  for resultfn in *.results.npz; do
+function calc_concord {
+  for resultfn in $TREERESULTDIR/*.results.npz; do
     runid=$(basename $resultfn | cut -d. -f1)
-    cmd="NUMBA_DISABLE_JIT=1 PYTHONPATH=$PTDIR/lib:$PYTHONPATH $PYTHON $BASEDIR/bin/calc_concordance.py"
-    if [[ -v "TREE_INDICES[$runid]" ]]; then
+    cmd="cd $TREERESULTDIR && NUMBA_DISABLE_JIT=1 PYTHONPATH=$PTDIR/lib:$PYTHONPATH $PYTHON $BASEDIR/bin/calc_concordance.py"
+    if [[ ${TREE_INDICES[$runid]+abc} ]]; then
       cmd+=" --tree-index ${TREE_INDICES[$runid]}"
     fi
     cmd+=" $INDIR/$runid.ssm"
     cmd+=" $resultfn "
     cmd+=" $DISCORDTRUTHDIR/${runid}.discord_truth.csv"
-    cmd+=" > ${runid}.discord.csv"
+    cmd+=" > $TREERESULTDIR/${runid}.discord.json"
     echo $cmd
-  done | parallel -j40 --halt 1 --eta
+  done #| parallel -j40 --halt 1 --eta
 }
 
 function add_discord_to_index {
@@ -158,7 +161,7 @@ function plot_steph_trees {
 
     cmd="$PYTHON $BASEDIR/bin/plot_steph_tree.py"
     cmd+=" --reorder-subclones"
-    if [[ -v "TREE_INDICES[$runid]" ]]; then
+    if [[ ${TREE_INDICES[$runid]+abc} ]]; then
       cmd+=" --tree-index ${TREE_INDICES[$runid]}"
     fi
     cmd+=" --runid $runid"
@@ -180,10 +183,10 @@ function main {
   #run_pairtree
   #plot_trees
 
-  #calc_discord
-  plot_steph_trees
-  make_tree_index
-  add_discord_to_index
+  calc_concord
+  #plot_steph_trees
+  #make_tree_index
+  #add_discord_to_index
 }
 
 main
