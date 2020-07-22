@@ -45,6 +45,7 @@ def write_header(runid, tidx, outf):
 
   basedir = os.path.join(os.path.dirname(__file__), '..', 'plot_resources')
   print('<script type="text/javascript">%s</script>' % plotutil.read_file('steph_eta_plotter.js', basedir), file=outf)
+  #print('<script type="text/javascript" src="../../plot_resources/steph_eta_plotter.js"></script>', file=outf)
 
   print('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">', file=outf)
   for cssfn in ('tree.css', 'matrix.css'):
@@ -311,6 +312,7 @@ def main():
         data['prob'],
         data['phi'],
         supervars,
+        data['clusters'],
         data['samples'],
       )
       tree_struct['discord'] = discord
