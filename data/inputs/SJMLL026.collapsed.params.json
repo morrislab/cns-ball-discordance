@@ -142,11 +142,11 @@
   "samp_colours": [
     [
       "dXeno 6 BM",
-      "#7a1bff"
+      "#000000"
     ],
     [
       "dXeno 6 CNS",
-      "#ffbe1b"
+      "#ff0000"
     ]
   ]
 }

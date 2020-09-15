@@ -291,6 +291,7 @@ StephEtaPlotter.prototype._plot_discord = function(svg, discord_pairs, y_offset,
     .style('pointer-events', 'none') // Pass events through to underlying `rect`.
     .attr('y', function(d) { return 0.5*self._discord_height - 0.5*self._bar_label_font_size; })
     .attr('font-size', this._bar_label_font_size)
+    .attr('fill', d => d3.interpolateRgb('#000000', '#ffffff')(1 - d.p_discord))
     .attr('dominant-baseline', 'central')
     .attr('text-anchor', 'middle');
   labels.append('tspan')

@@ -9,7 +9,6 @@ DISCORDTRUTHDIR=$DATADIR/discord.truth
 CLUSTMODEL=pairwise
 CLUSTRESULTDIR=$BASEDIR/scratch/clusters.steph.${CLUSTMODEL}.prior015
 TREERESULTDIR=$BASEDIR/scratch/trees
-PARALLEL=10
 NCHAINS=10
 PYTHON=$HOME/.apps/bin/python3
 
@@ -110,7 +109,7 @@ function plot_trees {
     cmd+=" $args"
     cmd+=" $TREERESULTDIR/${runid}.summposterior.html"
     echo $cmd
-  done | parallel -j40 --halt 2 --eta
+  done  | parallel -j40 --halt 2 --eta
 }
 
 function make_tree_index {
@@ -120,7 +119,7 @@ function make_tree_index {
     echo "<table>"
     for resultfn in *.results.npz; do
       runid=$(basename $resultfn | cut -d. -f1)
-      echo "<tr><td>$runid</td><td><a href=${runid}.plottree.html>orig tree</a></td><td><a href=${runid}.stephtree.html>tree with concord</a></td><td><a href=${runid}.summposterior.html>summary</a></td></tr>"
+      echo "<tr><td>$runid</td><td><a href=${runid}.plottree.html>orig tree</a></td><td><a href=${runid}.stephtree.html>tree with concord</a></td><td><a href=${runid}.summposterior.html>summary</a></td><td><a href=${runid}.di.html>diversity indices</a></td></tr>"
     done
     echo "</table>"
   ) > index.html
@@ -138,7 +137,20 @@ function calc_concord {
     cmd+=" $DISCORDTRUTHDIR/${runid}.discord_truth.csv"
     cmd+=" > $TREERESULTDIR/${runid}.discord.json"
     echo $cmd
-  done #| parallel -j40 --halt 1 --eta
+  done | parallel -j40 --halt 1 --eta
+}
+
+function plot_di {
+  for resultfn in $TREERESULTDIR/*.results.npz; do
+    runid=$(basename $resultfn | cut -d. -f1)
+    cmd="cd $TREERESULTDIR && NUMBA_DISABLE_JIT=1 PYTHONPATH=$PTDIR/lib:$PYTHONPATH $PYTHON $BASEDIR/bin/plot_di.py"
+    if [[ ${TREE_INDICES[$runid]+abc} ]]; then
+      cmd+=" --tree-index ${TREE_INDICES[$runid]}"
+    fi
+    cmd+=" $resultfn "
+    cmd+=" $TREERESULTDIR/${runid}.di.html"
+    echo $cmd
+  done | parallel -j40 --halt 1 --eta
 }
 
 function add_discord_to_index {
@@ -161,6 +173,7 @@ function plot_steph_trees {
 
     cmd="$PYTHON $BASEDIR/bin/plot_steph_tree.py"
     cmd+=" --reorder-subclones"
+    cmd+=" --remove-normal"
     if [[ ${TREE_INDICES[$runid]+abc} ]]; then
       cmd+=" --tree-index ${TREE_INDICES[$runid]}"
     fi
@@ -181,12 +194,13 @@ function main {
   #make_cluster_index
 
   #run_pairtree
-  #plot_trees
+  plot_trees
 
   calc_concord
-  #plot_steph_trees
-  #make_tree_index
-  #add_discord_to_index
+  plot_di
+  plot_steph_trees
+  make_tree_index
+  add_discord_to_index
 }
 
 main

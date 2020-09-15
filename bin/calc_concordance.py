@@ -2,7 +2,6 @@ import argparse
 import numpy as np
 import numpy.ma as ma
 import scipy.special
-import scipy.stats
 import csv
 import json
 
@@ -10,25 +9,13 @@ import common
 import inputparser
 import resultserializer
 import util
-import diversity_indices as di
+import stephutil
 
 def _convert_clustering_to_assignment(clusters):
   mapping = {vid: cidx for cidx, cluster in enumerate(clusters) for vid in cluster}
   vids = common.sort_vids(mapping.keys())
   assign = np.array([mapping[vid] for vid in vids], dtype=np.int32)
   return (vids, assign)
-
-def _find_samp_pairs(sampnames, tail1, tail2):
-  pairs = []
-  for idx1, samp in enumerate(sampnames):
-    if not samp.endswith(tail1):
-      continue
-    other = samp[:-len(tail1)] + tail2
-    if other not in sampnames:
-      continue
-    idx2 = sampnames.index(other)
-    pairs.append((idx1, idx2))
-  return pairs
 
 def _calc_kld(P, Q):
   for A in (P, Q):
@@ -143,34 +130,6 @@ def _calc_concord(variants, clusters, eta, sampnames, pairs, truth, bf_threshold
 
   return rows
 
-def _compare_di(eta, clusters, struct, sampnames, pairs):
-  didxs = {
-    'cdi': di.calc_cdi(eta),
-    'cmdi': di.calc_cmdi(eta, clusters, struct),
-  }
-  s1 = [p[0] for p in pairs]
-  s2 = [p[1] for p in pairs]
-  assert len(s1) == len(s2) > 0
-
-  results = {
-    'S1': [sampnames[idx] for idx in s1],
-    'S2': [sampnames[idx] for idx in s2],
-  }
-  for name, val in didxs.items():
-    results[name] = {}
-    for alt in ('two-sided', 'greater', 'less'):
-      stat, pval = scipy.stats.wilcoxon(
-        [val[idx] for idx in s1],
-        [val[idx] for idx in s2],
-        mode = 'exact',
-        alternative = alt,
-      )
-      results[name][alt] = {
-        'stat': stat,
-        'pval': pval,
-      }
-  return results
-
 def _parse_truth(truthfn):
   truth = {}
   with open(truthfn) as F:
@@ -206,20 +165,14 @@ def main():
   assert len(sampnames) == S
   eta = util.calc_eta(struct, phi)
 
-  cns_pairs = _find_samp_pairs(sampnames, ' BM', ' CNS')
-  spleen_pairs = _find_samp_pairs(sampnames, ' BM', ' Spleen')
+  cns_pairs = stephutil.find_samp_pairs(sampnames, ' BM', ' CNS')
+  spleen_pairs = stephutil.find_samp_pairs(sampnames, ' BM', ' Spleen')
   all_pairs = cns_pairs + spleen_pairs
 
   concord = _calc_concord(variants, clusters, eta, sampnames, all_pairs, truth)
-  di_cmp = {}
-  for name, pairs in (('cns', cns_pairs), ('spleen', spleen_pairs)):
-    if len(pairs) == 0:
-      continue
-    di_cmp[name] = _compare_di(eta, clusters, struct, sampnames, pairs)
 
   results = {
     'concord': concord,
-    'di_pairs': di_cmp,
   }
   print(json.dumps(results))
 
