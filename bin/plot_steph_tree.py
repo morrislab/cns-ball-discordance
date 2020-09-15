@@ -19,6 +19,8 @@ import json
 import util
 import plotutil
 
+import plotly.graph_objs as go
+import plotly.io as pio
 import csv
 
 def _choose_colours(N):
@@ -40,13 +42,9 @@ def write_header(runid, tidx, outf):
 
   print('<!doctype html><html lang="en"><head><meta charset="utf-8"><title>%s</title>' % title, file=outf)
   print('<script src="https://d3js.org/d3.v5.min.js"></script>', file=outf)
-  for jsfn in ('util.js', 'highlight_table_labels.js', 'phi_plotter.js', 'eta_plotter.js', 'vaf_matrix.js', 'tree_plotter.js'):
-    print('<script type="text/javascript">%s</script>' % plotutil.read_file(jsfn), file=outf)
-
-  basedir = os.path.join(os.path.dirname(__file__), '..', 'plot_resources')
-  print('<script type="text/javascript">%s</script>' % plotutil.read_file('steph_eta_plotter.js', basedir), file=outf)
-  #print('<script type="text/javascript" src="../../plot_resources/steph_eta_plotter.js"></script>', file=outf)
-
+  for jsfn in ('hsluv-0.1.0.min.js', 'util.js', 'highlight_table_labels.js', 'phi_plotter.js', 'vaf_matrix.js', 'tree_plotter.js', 'eta_plotter.js'):
+    print('<script>%s</script>' % plotutil.read_file(jsfn), file=outf)
+  print('<script src=steph_eta_plotter.js></script>', file=outf)
   print('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">', file=outf)
   for cssfn in ('tree.css', 'matrix.css'):
     print('<style type="text/css">%s</style>' % plotutil.read_file(cssfn), file=outf)
@@ -58,10 +56,24 @@ def write_header(runid, tidx, outf):
 def write_footer(outf):
   print('</main></body></html>', file=outf)
 
-def _write_tree_html(tree_data, tidx, visible_sampidxs, samp_colours, pop_colours, plot_eta, plot_phi, plot_phi_hat, plot_phi_error, plot_phi_interleaved, outf):
+def _write_tree_html(tree_data, tidx, visible_sampidxs, samp_colours, pop_colours, plot_eta, plot_diversity_indices, plot_phi, plot_phi_hat, plot_phi_interleaved, phi_orientation, remove_normal, outf):
   tree_data['visible_sampidxs'] = visible_sampidxs
   tree_data['samp_colours'] = samp_colours
   tree_data['pop_colours'] = pop_colours
+
+  if remove_normal:
+    orig_root = 0
+    clonal = np.flatnonzero(np.array(tree_data['parents']) == orig_root)
+    # Note that the JS code for PhiMatrix and EtaPlotter can handle
+    # polyprimaries, as both will remove the root population zero, then
+    # normalize the other frequencies to the *sum of* frequencies for all
+    # clonal populations. However, modifying the tree to remove the root for a
+    # polyprimary doesn't make sense, so throw an error in this isntance.
+    assert len(clonal) == 1, 'This tree represents a polyprimary, and so `remove_normal=True` would make the tree invalid'
+    root = clonal[0] + 1
+  else:
+    root = 0
+  remove_normal = 'true' if remove_normal else 'false'
 
   print('''
   <script type="text/javascript">
@@ -70,10 +82,16 @@ def _write_tree_html(tree_data, tidx, visible_sampidxs, samp_colours, pop_colour
 
   if(results.visible_sampidxs !== null) {
     results.visible_eta = results.eta.map(function(E) { return results.visible_sampidxs.map(function(idx) { return E[idx]; }); });
+    results.visible_cdi = results.visible_sampidxs.map(function(idx) { return results.cdi[idx]; });
+    results.visible_cmdi = results.visible_sampidxs.map(function(idx) { return results.cmdi[idx]; });
+    results.visible_sdi = results.visible_sampidxs.map(function(idx) { return results.sdi[idx]; });
     results.visible_phi = results.phi.map(function(P) { return results.visible_sampidxs.map(function(idx) { return P[idx]; }); });
     results.visible_samps = results.visible_sampidxs.map(function(idx) { return results.samples[idx]; });
   } else {
     results.visible_eta = results.eta;
+    results.visible_cdi = results.cdi;
+    results.visible_cmdi = results.cmdi;
+    results.visible_sdi = results.sdi;
     results.visible_phi = results.phi;
     results.visible_samps = results.samples;
   }
@@ -91,50 +109,55 @@ def _write_tree_html(tree_data, tidx, visible_sampidxs, samp_colours, pop_colour
       results.samp_colours.forEach(function(pair) { colour_list.append('li').style('color', pair[1]).text(pair[0]); });
     }
     (new TreePlotter()).plot(
-      0,
+      %s,
       results.parents,
       results.phi,
       results.samples,
       results.samp_colours,
       results.pop_colours,
+      '%s',
       container
     );
-  ''' % tidx), file=outf)
-
+  ''' % (tidx, root, remove_normal)), file=outf)
 
   if plot_eta:
     print('''
-    <div id="steph_eta_matrix" class="container"><h2>Steph population frequencies</h2></div>
+    <div id="eta_matrix" class="container"><h2>Population frequencies</h2></div>
     %s
     ''' % plotutil.js_on_load('''
-    (new StephEtaPlotter()).plot(results.visible_eta, results.visible_samps, results.discord, '#steph_eta_matrix', 0, true);
-    '''), file=outf)
+    (new StephEtaPlotter()).plot(results.visible_eta, results.visible_cdi, results.visible_cmdi, results.discord, results.visible_samps, '#eta_matrix', false, %s);
+    ''' % remove_normal), file=outf)
 
   if plot_phi:
     print('''
-    <div id="phi_matrix" class="container"><h2>Tree-constrained lineage frequencies</h2></div>
+    <div id="phi_matrix" class="container"><h2>Tree-constrained subclonal frequencies</h2></div>
     %s
     ''' % plotutil.js_on_load('''
-      (new PhiMatrix()).plot(results.visible_phi, results.visible_samps, '#phi_matrix');
-    '''), file=outf)
+      (new PhiMatrix()).plot(results.visible_phi, results.parents, results.visible_samps, '#phi_matrix', '%s', %s);
+    ''' % (phi_orientation, remove_normal)), file=outf)
 
   if plot_phi_hat:
     print('''
-    <div id="phi_hat_matrix" class="container"><h2>Data-implied lineage frequencies</h2></div>
+    <div id="phi_hat_matrix" class="container"><h2>Data-implied subclonal frequencies</h2></div>
     %s
-    ''' % plotutil.js_on_load('''(new PhiMatrix().plot(results.phi_hat, results.samples, '#phi_hat_matrix'));'''), file=outf)
-
-  if plot_phi_error:
-    print('''
-    <div id="phi_error_matrix" class="container"><h2>Lineage frequency error</h2></div>
-    %s
-    ''' % plotutil.js_on_load('''(new PhiErrorMatrix()).plot(results.phi, results.phi_hat, results.samples, '#phi_error_matrix');'''), file=outf)
+    ''' % plotutil.js_on_load('''
+      (new PhiMatrix()).plot(results.phi_hat, results.parents, results.samples, '#phi_hat_matrix', '%s', false, false);
+    ''' % phi_orientation), file=outf)
 
   if plot_phi_interleaved:
     print('''
-    <div id="phi_interleaved_matrix" class="container"><h2>Interleaved lineage frequencies</h2></div>
+    <div id="phi_interleaved_matrix" class="container"><h2>Interleaved subclonal frequencies</h2></div>
     %s
-    ''' % plotutil.js_on_load('''(new PhiInterleavedMatrix()).plot(results.phi, results.phi_hat, results.samples, '#phi_interleaved_matrix');'''), file=outf)
+    ''' % plotutil.js_on_load('''(new PhiInterleavedMatrix()).plot(results.phi, results.phi_hat, results.samples, '#phi_interleaved_matrix', '%s');''' % phi_orientation), file=outf)
+
+  if plot_diversity_indices:
+    print('<div id="diversity_indices" class="container"><h2>Diversity indices</h2>', file=outf)
+    _plot_diversity_indices({
+      'cdi': tree_data['cdi'],
+      'cmdi': tree_data['cmdi'],
+      'sdi': tree_data['sdi'],
+    }, tree_data['samples'], outf)
+    print('</div>', file=outf)
 
 def write_cluster_stats(clusters, garbage, supervars, variants, outf):
   cluster_dev = []
@@ -171,7 +194,7 @@ def _choose_plots(to_plot, to_omit, all_choices):
   # tree, so that the relevant data structures are generated below. This is
   # silly, so I should fix it eventually -- we should be able to plot just
   # the phis if we want.
-  if len(set(('phi', 'phi_hat', 'phi_error', 'phi_interleaved')) & plot_choices) > 0:
+  if len(set(('phi', 'phi_interleaved', 'eta', 'diversity_indices')) & plot_choices) > 0:
     plot_choices.add('tree')
 
   return plot_choices
@@ -215,6 +238,32 @@ def _reorder_subclones(data, params):
 
   return (new_data, new_params)
 
+def _plot_diversity_indices(div_idxs, sampnames, outf):
+  figs = []
+  html = ''
+
+  titles = {
+    'cdi': 'Clone diversity index',
+    'cmdi': 'Clone and mutation diversity index',
+    'sdi': 'Shannon diversity index',
+  }
+
+  for name in div_idxs.keys():
+    traces = dict(
+      type = 'bar',
+      name = name,
+      x = sampnames,
+      y = div_idxs[name],
+    )
+    layout = go.Layout(
+      template = 'plotly_white',
+      xaxis = {'title': 'Sample'},
+      yaxis = {'title': f'{titles[name]}<br>(bits)'},
+    )
+    fig = go.Figure(data=traces, layout=layout)
+    html = pio.to_html(fig, include_plotlyjs='cdn', full_html=False)
+    print(html, file=outf)
+
 def _parse_discord(discordfn):
   with open(discordfn) as F:
     reader = csv.DictReader(F)
@@ -230,10 +279,10 @@ def main():
     'vaf_matrix',
     'phi',
     'phi_hat',
-    'phi_error',
     'phi_interleaved',
     'cluster_stats',
     'eta',
+    'diversity_indices',
   ))
   parser = argparse.ArgumentParser(
     description='LOL HI THERE',
@@ -250,14 +299,17 @@ def main():
     help='Reorder subclones according to depth-first search through tree structure')
   parser.add_argument('--tree-json', dest='tree_json_fn',
     help='Additional external file in which to store JSON, which is already stored statically in the HTML file')
-  parser.add_argument('--colour-eta-uniquely', action='store_true',
-    help='Choose unique colours for each population in eta plot')
+  parser.add_argument('--phi-orientation', choices=('samples_as_rows', 'populations_as_rows'), default='populations_as_rows')
+  parser.add_argument('--remove-normal', action='store_true',
+    help='Remove normal (non-cancerous) population 0 from tree, phi, and eta plots.')
   parser.add_argument('ssm_fn')
   parser.add_argument('params_fn')
-  parser.add_argument('pairtree_fn')
+  parser.add_argument('results_fn')
   parser.add_argument('discord_fn')
   parser.add_argument('html_out_fn')
   args = parser.parse_args()
+
+  np.seterr(divide='raise', invalid='raise', over='raise')
 
   if args.seed is not None:
     random.seed(args.seed)
@@ -265,7 +317,7 @@ def main():
 
   plot_choices = _choose_plots(args.plot_choices, args.omit_plots, all_plot_choices)
 
-  results = resultserializer.Results(args.pairtree_fn)
+  results = resultserializer.Results(args.results_fn)
   variants = inputparser.load_ssms(args.ssm_fn)
   params = inputparser.load_params(args.params_fn)
   discord = _parse_discord(args.discord_fn)
@@ -279,7 +331,7 @@ def main():
   )}
   data['garbage'] = results.get('garbage')
   data['clusters'] = results.get('clusters')
-  data['samples'] = results.get('sampnames')
+  data['samples'] = params['samples']
   data['clustrel_posterior'] = results.get_mutrel('clustrel_posterior')
   if args.reorder_subclones:
     data, params = _reorder_subclones(data, params)
@@ -316,6 +368,7 @@ def main():
         data['samples'],
       )
       tree_struct['discord'] = discord
+
       _write_tree_html(
         tree_struct,
         args.tree_index,
@@ -323,14 +376,16 @@ def main():
         samp_colours,
         pop_colours,
         'eta' in plot_choices,
+        'diversity_indices' in plot_choices,
         'phi' in plot_choices,
         'phi_hat' in plot_choices,
-        'phi_error' in plot_choices,
         'phi_interleaved' in plot_choices,
+        args.phi_orientation,
+        args.remove_normal,
         outf,
       )
       if args.tree_json_fn is not None:
-        _write_tree_json(full_tree_struct, args.tree_json_fn)
+        _write_tree_json(tree_struct, args.tree_json_fn)
 
     if 'vaf_matrix' in plot_choices:
       vaf_plotter.plot_vaf_matrix(
