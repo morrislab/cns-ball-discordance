@@ -281,7 +281,7 @@ StephEtaPlotter.prototype._plot_discord = function(svg, discord_pairs, y_offset,
     .attr('y', 0)
     .attr('width', d => d.width)
     .attr('height', this._discord_height)
-    .attr('fill', d => colour(d.p_discord));
+    .attr('fill', d => colour(1 - d.p_discord));
   let labels = elems.selectAll('text')
     .data(discord_pairs)
     .join('svg:text')
@@ -291,7 +291,7 @@ StephEtaPlotter.prototype._plot_discord = function(svg, discord_pairs, y_offset,
     .style('pointer-events', 'none') // Pass events through to underlying `rect`.
     .attr('y', function(d) { return 0.5*self._discord_height - 0.5*self._bar_label_font_size; })
     .attr('font-size', this._bar_label_font_size)
-    .attr('fill', d => d3.interpolateRgb('#000000', '#ffffff')(1 - d.p_discord))
+    .attr('fill', d => d3.interpolateRgb('#000000', '#ffffff')(d.p_discord))
     .attr('dominant-baseline', 'central')
     .attr('text-anchor', 'middle');
   labels.append('tspan')
@@ -300,7 +300,7 @@ StephEtaPlotter.prototype._plot_discord = function(svg, discord_pairs, y_offset,
   labels.append('tspan')
     .attr('x', d => d.x_offset + 0.5*d.width)
     .attr('dy', 1.2*this._bar_label_font_size)
-    .text((d, i) => _make_percent(d.p_discord));
+    .text((d, i) => _make_percent(1 - d.p_discord));
 }
 
 StephEtaPlotter.prototype._make_discord_legend = function(svg, colour, x_offset, y_offset) {

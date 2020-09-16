@@ -44,7 +44,7 @@ def write_header(runid, tidx, outf):
   print('<script src="https://d3js.org/d3.v5.min.js"></script>', file=outf)
   for jsfn in ('hsluv-0.1.0.min.js', 'util.js', 'highlight_table_labels.js', 'phi_plotter.js', 'vaf_matrix.js', 'tree_plotter.js', 'eta_plotter.js'):
     print('<script>%s</script>' % plotutil.read_file(jsfn), file=outf)
-  print('<script src=steph_eta_plotter.js></script>', file=outf)
+  print('<script>%s</script>' % plotutil.read_file('steph_eta_plotter.js', os.path.join(os.path.dirname(__file__), '..', 'plot_resources')), file=outf)
   print('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">', file=outf)
   for cssfn in ('tree.css', 'matrix.css'):
     print('<style type="text/css">%s</style>' % plotutil.read_file(cssfn), file=outf)
