@@ -3,29 +3,19 @@ import numpy as np
 import numpy.ma as ma
 import scipy.special
 import csv
+import json
 
 import common
 import inputparser
 import resultserializer
 import util
+import stephutil
 
 def _convert_clustering_to_assignment(clusters):
   mapping = {vid: cidx for cidx, cluster in enumerate(clusters) for vid in cluster}
   vids = common.sort_vids(mapping.keys())
   assign = np.array([mapping[vid] for vid in vids], dtype=np.int32)
   return (vids, assign)
-
-def _find_samp_pairs(sampnames, tail1, tail2):
-  pairs = []
-  for idx1, samp in enumerate(sampnames):
-    if not samp.endswith(tail1):
-      continue
-    other = samp[:-len(tail1)] + tail2
-    if other not in sampnames:
-      continue
-    idx2 = sampnames.index(other)
-    pairs.append((idx1, idx2))
-  return pairs
 
 def _calc_kld(P, Q):
   for A in (P, Q):
@@ -97,8 +87,7 @@ def _calc_bayes_factors(variants, clusters, eta, pairs):
     logbf[pair] = (m1_llh, m2_llh)
   return logbf
 
-def _print_concord(variants, clusters, eta, sampnames, truth, bf_threshold=2, sort_by_bf=False):
-  pairs = _find_samp_pairs(sampnames, ' BM', ' CNS') + _find_samp_pairs(sampnames, ' BM', ' Spleen')
+def _calc_concord(variants, clusters, eta, sampnames, pairs, truth, bf_threshold=2):
   jsd = _calc_concord_jsd(eta, pairs)
   logbf = _calc_bayes_factors(variants, clusters, eta, pairs)
 
@@ -133,19 +122,13 @@ def _print_concord(variants, clusters, eta, sampnames, truth, bf_threshold=2, so
       'm2_llh': logbf[pair][1],
       'log_bf': log_bf,
       'p_discord': np.exp(logbf[pair][0] - scipy.special.logsumexp(logbf[pair])),
-      'is_discord': is_discord,
-      'truth_discord': T,
-      'agreement': is_discord == T,
+      'is_discord': bool(is_discord),
+      'truth_discord': bool(T),
+      'agreement': bool(is_discord == T),
     })
 
-  if sort_by_bf:
-    rows = sorted(rows, key = lambda R: R['log_bf'])
 
-  print(*fields, sep=',')
-  for R in rows:
-    for key in ('jsd', 'p_discord'):
-      R[key] = '%.3f' % R[key]
-    print(*[R[key] for key in fields], sep=',')
+  return rows
 
 def _parse_truth(truthfn):
   truth = {}
@@ -182,7 +165,16 @@ def main():
   assert len(sampnames) == S
   eta = util.calc_eta(struct, phi)
 
-  _print_concord(variants, clusters, eta, sampnames, truth)
+  cns_pairs = stephutil.find_samp_pairs(sampnames, ' BM', ' CNS')
+  spleen_pairs = stephutil.find_samp_pairs(sampnames, ' BM', ' Spleen')
+  all_pairs = cns_pairs + spleen_pairs
+
+  concord = _calc_concord(variants, clusters, eta, sampnames, all_pairs, truth)
+
+  results = {
+    'concord': concord,
+  }
+  print(json.dumps(results))
 
 if __name__ == '__main__':
   main()
