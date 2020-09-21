@@ -1,0 +1,436 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.2cm
+\topmargin 2.2cm
+\rightmargin 2.2cm
+\bottommargin 2.2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Clonal diversity index
+\end_layout
+
+\begin_layout Subsection
+Explanation
+\end_layout
+
+\begin_layout Standard
+The clonal diversity index (CDI) is a new score in Pairtree that Quaid and
+ I developed to quantify the amount of clonal heterogeneity present in a
+ tissue sample, with higher CDIs reflecting more diversity.
+ It's a measurement of uncertainty—intuitively, it answers the question,
+ 
+\begin_inset Quotes eld
+\end_inset
+
+If I were to reach blindly into this tissue sample and pull out a random
+ cancer cell, how uncertain would I be about what clone this cell originated
+ from?
+\begin_inset Quotes erd
+\end_inset
+
+ The more diverse the clonal composition of a sample, the more uncertainty
+ you'd have, and the higher the CDI would be.
+ Since it's a measurement of uncertainty taken from information theory,
+ the CDI is measured in bits of information.
+ It can never be smaller than zero, but can be arbitrarily high.
+ To get a higher CDI, you can have more clones present in a tissue sample,
+ or you can have those clones present in more equal proportions.
+ E.g., a tissue sample composed of 98% of one clone and 2% of another would
+ have a lower CDI than a tissue sample composed of a 50-50 split of the
+ same two clones.
+ A CDI of zero bits means the sample consists of only a single clone, and
+ so you have no uncertainty about what clone each cancer cell belongs to;
+ a CDI of 1 bit corresponds to two clones, each giving rise to 50% of the
+ sample; two clones present in a 98% and 2% mix would give a CDI of 0.14
+ bits.
+\end_layout
+
+\begin_layout Standard
+The CDI is a direct translation of the Shannon diversity index from ecology
+ into the cancer genomics setting: 
+\begin_inset CommandInset href
+LatexCommand href
+target "https://en.wikipedia.org/wiki/Diversity_index#Shannon_index"
+literal "false"
+
+\end_inset
+
+.
+ We would have preferred to call our measure 
+\begin_inset Quotes eld
+\end_inset
+
+SDI
+\begin_inset Quotes erd
+\end_inset
+
+ rather than 
+\begin_inset Quotes eld
+\end_inset
+
+CDI
+\begin_inset Quotes erd
+\end_inset
+
+, but the Wolf (2019) melanoma paper (
+\begin_inset CommandInset href
+LatexCommand href
+target "https://www.sciencedirect.com/science/article/pii/S0092867419309511"
+literal "false"
+
+\end_inset
+
+) defined 
+\begin_inset Quotes eld
+\end_inset
+
+SDI
+\begin_inset Quotes erd
+\end_inset
+
+ to be something different (which is wrong and misleading, unfortunately),
+ so we decided to call our measure 
+\begin_inset Quotes eld
+\end_inset
+
+CDI
+\begin_inset Quotes erd
+\end_inset
+
+ to avoid confusion.
+\end_layout
+
+\begin_layout Subsection
+Examples
+\end_layout
+
+\begin_layout Standard
+The CDI is just a concise summary of the diversity you see in the population
+ frequency plots that Steph is including in the paper.
+ If you look at fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:eta"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cdi_bar"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, you can compare the CDI of rXeno 10 BM and CNS, for example, and see that
+ the BM value is much lower (0.01 bits vs.
+ 0.30 bits).
+ This is because the rXeno 10 BM is very nearly pure, but the CNS has small
+ proportions of the pop.
+ 2 and pop.
+ 4 clones in addition to pop.
+ 5.
+ Conversely, the most diverse sample is the original patient sample, with
+ a CDI of 2.37 bits.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename eta.png
+	lyxscale 40
+	scale 80
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+SJMLL039 population frequencies
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:eta"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename cdi_bar.png
+	lyxscale 40
+	scale 80
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+SJMLL039 CDI values in relapse samples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cdi_bar"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+CDI is interesting in the context of this study because we can compare CDI
+ values across all BM/CNS pairs.
+ When we look at the diagnosis samples in either MLL, we don't see a clear
+ relationship.
+ However, in the relapse pairs (fig.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cdi_cmp"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+), we see in SJMLL026 that BM CDI is always greater than the CNS CDI from
+ the same mouse (i.e., under the diagonal), and that in SJMLL039 the BM CDI
+ is always less (i.e., above the diagonal).
+ You could intuit this relationship by looking at the population frequency
+ bars for each pair (as in the rXeno 10 BM/CNS example above), but the CDI
+ gives us a means of quantifying it.
+\end_layout
+
+\begin_layout Standard
+We also did a Wilcoxon signed-rank test using the CDI values for each BM/CNS
+ relapse pair in the two cancers.
+ In SJMLL026, we could reject the null hypothesis of 
+\begin_inset Quotes eld
+\end_inset
+
+relapse BM CDI is less than relapse CNS CDI
+\begin_inset Quotes erd
+\end_inset
+
+ with 
+\begin_inset Formula $p=0.0005$
+\end_inset
+
+, supporting the alternative hypothesis that 
+\begin_inset Quotes eld
+\end_inset
+
+relapse BM CDI is greater than relapse CNS CDI
+\begin_inset Quotes erd
+\end_inset
+
+.
+ In SJML039, we could reject the null hypothesis of 
+\begin_inset Quotes eld
+\end_inset
+
+relapse BM CDI is greater than relapse CNS CDI
+\begin_inset Quotes erd
+\end_inset
+
+ with 
+\begin_inset Formula $p=0.004$
+\end_inset
+
+, supporting the alternative hypothesis that 
+\begin_inset Quotes eld
+\end_inset
+
+relapse BM CDI is less than relapse CNS CDI
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This is an interesting result—we consistently see the relapse CNS samples
+ being less diverse than BM in SJMLL026, but more diverse in SJMLL039.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename cdi.png
+	lyxscale 40
+	scale 80
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+A.
+ SJMLL026 BM vs.
+ CNS CDI.
+ in relapse xenos.
+ B.
+ SJMLL039 BM vs.
+ CNS CDI.
+ in relapse xenos
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cdi_cmp"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
