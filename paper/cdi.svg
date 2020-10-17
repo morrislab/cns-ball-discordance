@@ -1,0 +1,932 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="cdi.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg210"
+   version="1.1"
+   viewBox="0 0 210 297"
+   height="297mm"
+   width="210mm">
+  <defs
+     id="defs204">
+    <clipPath
+       class="axesclip"
+       id="clip8345e7xy">
+      <rect
+         x="80"
+         y="100"
+         width="440"
+         height="220"
+         id="rect13" />
+    </clipPath>
+    <clipPath
+       id="clip8345e7xyplot"
+       class="plotclip">
+      <rect
+         y="0"
+         x="0"
+         width="440"
+         height="220"
+         id="rect4" />
+    </clipPath>
+    <clipPath
+       class="axesclip"
+       id="clipeaa9f6xy">
+      <rect
+         x="80"
+         y="100"
+         width="440"
+         height="220"
+         id="rect13-3" />
+    </clipPath>
+    <clipPath
+       id="clipeaa9f6xyplot"
+       class="plotclip">
+      <rect
+         y="0"
+         x="0"
+         width="440"
+         height="220"
+         id="rect4-6" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     inkscape:window-maximized="1"
+     inkscape:window-y="0"
+     inkscape:window-x="0"
+     inkscape:window-height="1080"
+     inkscape:window-width="1920"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="343.14176"
+     inkscape:cx="381.03801"
+     inkscape:zoom="0.7"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata207">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <g
+       transform="matrix(0.74847441,0,0,0.74847441,50.505265,-68.934424)"
+       id="g757">
+      <g
+         id="g157-6"
+         class="cartesianlayer"
+         transform="matrix(0.26458333,0,0,0.26458333,72.571429,83.532733)">
+        <g
+           id="g155-2"
+           class="subplot xy">
+          <g
+             id="g33-9"
+             class="layer-subplot">
+            <g
+               id="g29-1"
+               class="shapelayer" />
+            <g
+               id="g31-2"
+               class="imagelayer" />
+          </g>
+          <g
+             id="g53"
+             class="gridlayer">
+            <g
+               id="g41-7"
+               class="x">
+              <path
+                 id="path35-0"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 0,100 V 320"
+                 transform="translate(196.66)"
+                 class="xgrid crisp" />
+              <path
+                 id="path37-9"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 0,100 V 320"
+                 transform="translate(313.32)"
+                 class="xgrid crisp" />
+              <path
+                 id="path39-3"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 0,100 V 320"
+                 transform="translate(429.97)"
+                 class="xgrid crisp" />
+            </g>
+            <g
+               id="g51"
+               class="y">
+              <path
+                 id="path43-6"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 80,0 H 520"
+                 transform="translate(0,268.96)"
+                 class="ygrid crisp" />
+              <path
+                 id="path45-0"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 80,0 H 520"
+                 transform="translate(0,217.93)"
+                 class="ygrid crisp" />
+              <path
+                 id="path47"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 80,0 H 520"
+                 transform="translate(0,166.89)"
+                 class="ygrid crisp" />
+              <path
+                 id="path49"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 80,0 H 520"
+                 transform="translate(0,115.85)"
+                 class="ygrid crisp" />
+            </g>
+          </g>
+          <g
+             id="g59"
+             class="zerolinelayer">
+            <path
+               id="path55"
+               style="stroke:#ebf0f8;stroke-width:2px;stroke-opacity:1"
+               d="M 0,100 V 320"
+               transform="translate(80)"
+               class="xzl zl crisp" />
+            <path
+               id="path57-6"
+               style="stroke:#ebf0f8;stroke-width:2px;stroke-opacity:1"
+               d="M 80,0 H 520"
+               transform="translate(0,320)"
+               class="yzl zl crisp" />
+          </g>
+          <path
+             id="path61"
+             class="xlines-below"
+             d="" />
+          <path
+             id="path63"
+             class="ylines-below"
+             d="" />
+          <g
+             id="g65-2"
+             class="overlines-below" />
+          <g
+             id="g67-6"
+             class="xaxislayer-below" />
+          <g
+             id="g69-1"
+             class="yaxislayer-below" />
+          <g
+             id="g71-8"
+             class="overaxes-below" />
+          <g
+             id="g103-7"
+             clip-path="url(#clipeaa9f6xyplot)"
+             transform="translate(80,100)"
+             class="plot">
+            <g
+               id="g101-9"
+               class="scatterlayer mlayer">
+              <g
+                 id="g99-2"
+                 style="opacity:1;stroke-miterlimit:2"
+                 class="trace scatter trace8d45f4">
+                <g
+                   id="g73-0"
+                   class="fills" />
+                <g
+                   id="g75"
+                   class="errorbars" />
+                <g
+                   id="g77"
+                   class="lines" />
+                <g
+                   id="g95"
+                   class="points">
+                  <path
+                     id="path79-2"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(312.62,31.64)"
+                     class="point" />
+                  <path
+                     id="path81-3"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(165.17,48.93)"
+                     class="point" />
+                  <path
+                     id="path83-7"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(400,20)"
+                     class="point" />
+                  <path
+                     id="path85-5"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(176.15,108.93)"
+                     class="point" />
+                  <path
+                     id="path87-9"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(307,69.11)"
+                     class="point" />
+                  <path
+                     id="path89-2"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(118.99,163.45)"
+                     class="point" />
+                  <path
+                     id="path91-2"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(3.43,189.83)"
+                     class="point" />
+                  <path
+                     id="path93-8"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(87.8,113.81)"
+                     class="point" />
+                </g>
+                <g
+                   id="g97-9"
+                   class="text" />
+              </g>
+            </g>
+          </g>
+          <g
+             id="g105-7"
+             class="overplot" />
+          <path
+             id="path107"
+             d="M 0,0"
+             style="fill:none"
+             class="xlines-above crisp" />
+          <path
+             id="path109-3"
+             d="M 0,0"
+             style="fill:none"
+             class="ylines-above crisp" />
+          <g
+             id="g111"
+             class="overlines-above" />
+          <g
+             id="g129-6"
+             class="xaxislayer-above">
+            <g
+               id="g115"
+               class="xtick">
+              <text
+                 id="text113"
+                 transform="translate(80)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="333"
+                 x="0"
+                 text-anchor="middle">0</text>
+            </g>
+            <g
+               id="g119"
+               class="xtick">
+              <text
+                 id="text117"
+                 transform="translate(196.66)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="333"
+                 x="0"
+                 text-anchor="middle">0.5</text>
+            </g>
+            <g
+               id="g123"
+               class="xtick">
+              <text
+                 id="text121"
+                 transform="translate(313.32)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="333"
+                 x="0"
+                 text-anchor="middle">1</text>
+            </g>
+            <g
+               id="g127"
+               class="xtick">
+              <text
+                 id="text125"
+                 transform="translate(429.97)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="333"
+                 x="0"
+                 text-anchor="middle">1.5</text>
+            </g>
+          </g>
+          <g
+             id="g151-1"
+             class="yaxislayer-above">
+            <g
+               id="g133"
+               class="ytick">
+              <text
+                 id="text131"
+                 transform="translate(0,320)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="4.1999998"
+                 x="79"
+                 text-anchor="end">0</text>
+            </g>
+            <g
+               id="g137"
+               class="ytick">
+              <text
+                 id="text135"
+                 transform="translate(0,268.96)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="4.1999998"
+                 x="79"
+                 text-anchor="end">0.5</text>
+            </g>
+            <g
+               id="g141"
+               class="ytick">
+              <text
+                 id="text139"
+                 transform="translate(0,217.93)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="4.1999998"
+                 x="79"
+                 text-anchor="end">1</text>
+            </g>
+            <g
+               id="g145-2"
+               class="ytick">
+              <text
+                 id="text143"
+                 transform="translate(0,166.89)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="4.1999998"
+                 x="79"
+                 text-anchor="end">1.5</text>
+            </g>
+            <g
+               id="g149-9"
+               class="ytick">
+              <text
+                 id="text147"
+                 transform="translate(0,115.85)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="4.1999998"
+                 x="79"
+                 text-anchor="end">2</text>
+            </g>
+          </g>
+          <g
+             id="g153-3"
+             class="overaxes-above" />
+        </g>
+      </g>
+      <g
+         id="g184-4"
+         class="layer-above"
+         transform="matrix(0.26458333,0,0,0.26458333,72.571429,83.532733)">
+        <g
+           id="g178-5"
+           class="imagelayer" />
+        <g
+           id="g182"
+           class="shapelayer">
+          <path
+             id="path180"
+             clip-path="url(#clipeaa9f6xy)"
+             style="opacity:1;fill:#000000;fill-opacity:0;stroke:#2a3f5f;stroke-width:2px;stroke-opacity:1"
+             d="M 80,320 480,145"
+             fill-rule="evenodd"
+             data-index="0" />
+        </g>
+      </g>
+      <g
+         id="g196"
+         class="infolayer"
+         transform="matrix(0.26458333,0,0,0.26458333,72.571429,83.532733)">
+        <g
+           id="g186"
+           class="g-gtitle" />
+        <g
+           id="g190-0"
+           class="g-xtitle">
+          <text
+             id="text188"
+             text-anchor="middle"
+             y="361.79999"
+             x="300"
+             style="font-weight:normal;font-size:14px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;opacity:1;fill:#2a3f5f"
+             class="xtitle">BM CDI (bits)</text>
+        </g>
+        <g
+           id="g194"
+           class="g-ytitle">
+          <text
+             id="text192"
+             text-anchor="middle"
+             y="210"
+             x="36.499805"
+             style="font-weight:normal;font-size:14px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;opacity:1;fill:#2a3f5f"
+             transform="rotate(-90,36.499805,210)"
+             class="ytitle">CNS CDI (bits)</text>
+        </g>
+      </g>
+    </g>
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-52.84107,27.214281)"
+       class="bglayer"
+       id="g21" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-52.84107,27.214281)"
+       class="layer-below"
+       id="g27">
+      <g
+         class="imagelayer"
+         id="g23" />
+      <g
+         class="shapelayer"
+         id="g25" />
+    </g>
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-52.84107,27.214281)"
+       class="polarlayer"
+       id="g153" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-52.84107,27.214281)"
+       class="ternarylayer"
+       id="g155" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-52.84107,27.214281)"
+       class="geolayer"
+       id="g157" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-52.84107,27.214281)"
+       class="funnelarealayer"
+       id="g159" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-52.84107,27.214281)"
+       class="pielayer"
+       id="g161" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-52.84107,27.214281)"
+       class="treemaplayer"
+       id="g163" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-52.84107,27.214281)"
+       class="sunburstlayer"
+       id="g165" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-52.84107,27.214281)"
+       class="glimages"
+       id="g167" />
+    <g
+       transform="matrix(0.74847441,0,0,0.74847441,39.53803,-26.781504)"
+       id="g831">
+      <g
+         id="g151"
+         class="cartesianlayer"
+         transform="matrix(0.26458333,0,0,0.26458333,-54.428571,27.214281)">
+        <g
+           id="g149"
+           class="subplot xy">
+          <g
+             id="g33"
+             class="layer-subplot">
+            <g
+               id="g29"
+               class="shapelayer" />
+            <g
+               id="g31"
+               class="imagelayer" />
+          </g>
+          <g
+             id="g49"
+             class="gridlayer">
+            <g
+               id="g41"
+               class="x">
+              <path
+                 id="path35"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 0,100 V 320"
+                 transform="translate(194.67)"
+                 class="xgrid crisp" />
+              <path
+                 id="path37"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 0,100 V 320"
+                 transform="translate(309.34)"
+                 class="xgrid crisp" />
+              <path
+                 id="path39"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 0,100 V 320"
+                 transform="translate(424.01)"
+                 class="xgrid crisp" />
+            </g>
+            <g
+               id="g47"
+               class="y">
+              <path
+                 id="path43"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 80,0 H 520"
+                 transform="translate(0,245.16)"
+                 class="ygrid crisp" />
+              <path
+                 id="path45"
+                 style="stroke:#ebf0f8;stroke-width:1px;stroke-opacity:1"
+                 d="M 80,0 H 520"
+                 transform="translate(0,170.32)"
+                 class="ygrid crisp" />
+            </g>
+          </g>
+          <g
+             id="g55"
+             class="zerolinelayer">
+            <path
+               id="path51"
+               style="stroke:#ebf0f8;stroke-width:2px;stroke-opacity:1"
+               d="M 0,100 V 320"
+               transform="translate(80)"
+               class="xzl zl crisp" />
+            <path
+               id="path53"
+               style="stroke:#ebf0f8;stroke-width:2px;stroke-opacity:1"
+               d="M 80,0 H 520"
+               transform="translate(0,320)"
+               class="yzl zl crisp" />
+          </g>
+          <path
+             id="path57"
+             class="xlines-below"
+             d="" />
+          <path
+             id="path59"
+             class="ylines-below"
+             d="" />
+          <g
+             id="g61"
+             class="overlines-below" />
+          <g
+             id="g63"
+             class="xaxislayer-below" />
+          <g
+             id="g65"
+             class="yaxislayer-below" />
+          <g
+             id="g67"
+             class="overaxes-below" />
+          <g
+             id="g105"
+             clip-path="url(#clip8345e7xyplot)"
+             transform="translate(80,100)"
+             class="plot">
+            <g
+               id="g103"
+               class="scatterlayer mlayer">
+              <g
+                 id="g101"
+                 style="opacity:1;stroke-miterlimit:2"
+                 class="trace scatter trace421479">
+                <g
+                   id="g69"
+                   class="fills" />
+                <g
+                   id="g71"
+                   class="errorbars" />
+                <g
+                   id="g73"
+                   class="lines" />
+                <g
+                   id="g97"
+                   class="points">
+                  <path
+                     id="path75"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(306.22,65)"
+                     class="point" />
+                  <path
+                     id="path77"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(400,62.29)"
+                     class="point" />
+                  <path
+                     id="path79"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(354.74,144.29)"
+                     class="point" />
+                  <path
+                     id="path81"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(352.92,212.04)"
+                     class="point" />
+                  <path
+                     id="path83"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(349.17,82.12)"
+                     class="point" />
+                  <path
+                     id="path85"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(226.37,156.22)"
+                     class="point" />
+                  <path
+                     id="path87"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(336.1,20)"
+                     class="point" />
+                  <path
+                     id="path89"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(231.2,220)"
+                     class="point" />
+                  <path
+                     id="path91"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(237,161.97)"
+                     class="point" />
+                  <path
+                     id="path93"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(154.07,213.71)"
+                     class="point" />
+                  <path
+                     id="path95"
+                     d="M 9,0 A 9,9 0 1 1 0,-9 9,9 0 0 1 9,0 Z"
+                     style="opacity:0.75;fill:#000000;fill-opacity:1;stroke-width:0px"
+                     transform="translate(103.75,184.23)"
+                     class="point" />
+                </g>
+                <g
+                   id="g99"
+                   class="text" />
+              </g>
+            </g>
+          </g>
+          <g
+             id="g107"
+             class="overplot" />
+          <path
+             id="path109"
+             d="M 0,0"
+             style="fill:none"
+             class="xlines-above crisp" />
+          <path
+             id="path111"
+             d="M 0,0"
+             style="fill:none"
+             class="ylines-above crisp" />
+          <g
+             id="g113"
+             class="overlines-above" />
+          <g
+             id="g131"
+             class="xaxislayer-above">
+            <g
+               id="g117"
+               class="xtick">
+              <text
+                 id="text115"
+                 transform="translate(80)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="333"
+                 x="0"
+                 text-anchor="middle">0</text>
+            </g>
+            <g
+               id="g121"
+               class="xtick">
+              <text
+                 id="text119"
+                 transform="translate(194.67)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="333"
+                 x="0"
+                 text-anchor="middle">0.5</text>
+            </g>
+            <g
+               id="g125"
+               class="xtick">
+              <text
+                 id="text123"
+                 transform="translate(309.34)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="333"
+                 x="0"
+                 text-anchor="middle">1</text>
+            </g>
+            <g
+               id="g129"
+               class="xtick">
+              <text
+                 id="text127"
+                 transform="translate(424.01)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="333"
+                 x="0"
+                 text-anchor="middle">1.5</text>
+            </g>
+          </g>
+          <g
+             id="g145"
+             class="yaxislayer-above">
+            <g
+               id="g135"
+               class="ytick">
+              <text
+                 id="text133"
+                 transform="translate(0,320)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="4.1999998"
+                 x="79"
+                 text-anchor="end">0</text>
+            </g>
+            <g
+               id="g139"
+               class="ytick">
+              <text
+                 id="text137"
+                 transform="translate(0,245.16)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="4.1999998"
+                 x="79"
+                 text-anchor="end">0.5</text>
+            </g>
+            <g
+               id="g143"
+               class="ytick">
+              <text
+                 id="text141"
+                 transform="translate(0,170.32)"
+                 style="font-size:12px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;fill:#2a3f5f;fill-opacity:1"
+                 y="4.1999998"
+                 x="79"
+                 text-anchor="end">1</text>
+            </g>
+          </g>
+          <g
+             id="g147"
+             class="overaxes-above" />
+        </g>
+      </g>
+      <g
+         id="g178"
+         class="layer-above"
+         transform="matrix(0.26458333,0,0,0.26458333,-54.428571,27.214281)">
+        <g
+           id="g172"
+           class="imagelayer" />
+        <g
+           id="g176"
+           class="shapelayer">
+          <path
+             id="path174"
+             clip-path="url(#clip8345e7xy)"
+             style="opacity:1;fill:#000000;fill-opacity:0;stroke:#2a3f5f;stroke-width:2px;stroke-opacity:1"
+             d="M 80,320 386.43,120"
+             fill-rule="evenodd"
+             data-index="0" />
+        </g>
+      </g>
+      <g
+         id="g190"
+         class="infolayer"
+         transform="matrix(0.26458333,0,0,0.26458333,-54.428571,27.214281)">
+        <g
+           id="g180"
+           class="g-gtitle" />
+        <g
+           id="g184"
+           class="g-xtitle">
+          <text
+             id="text182"
+             text-anchor="middle"
+             y="361.79999"
+             x="300"
+             style="font-weight:normal;font-size:14px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;opacity:1;fill:#2a3f5f"
+             class="xtitle">BM CDI (bits)</text>
+        </g>
+        <g
+           id="g188"
+           class="g-ytitle">
+          <text
+             id="text186"
+             text-anchor="middle"
+             y="210"
+             x="36.499805"
+             style="font-weight:normal;font-size:14px;font-family:'TOBESTRIPPEDOpen SansTOBESTRIPPED', verdana, arial, sans-serif;white-space:pre;opacity:1;fill:#2a3f5f"
+             transform="rotate(-90,36.499805,210)"
+             class="ytitle">CNS CDI (bits)</text>
+        </g>
+      </g>
+    </g>
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,74.15893,83.532733)"
+       class="bglayer"
+       id="g21-7" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,74.15893,83.532733)"
+       class="layer-below"
+       id="g27-5">
+      <g
+         class="imagelayer"
+         id="g23-3" />
+      <g
+         class="shapelayer"
+         id="g25-5" />
+    </g>
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,74.15893,83.532733)"
+       class="polarlayer"
+       id="g159-1" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,74.15893,83.532733)"
+       class="ternarylayer"
+       id="g161-9" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,74.15893,83.532733)"
+       class="geolayer"
+       id="g163-4" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,74.15893,83.532733)"
+       class="funnelarealayer"
+       id="g165-7" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,74.15893,83.532733)"
+       class="pielayer"
+       id="g167-8" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,74.15893,83.532733)"
+       class="treemaplayer"
+       id="g169" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,74.15893,83.532733)"
+       class="sunburstlayer"
+       id="g171" />
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,74.15893,83.532733)"
+       class="glimages"
+       id="g173" />
+    <text
+       id="text28621"
+       y="12.316851"
+       x="3.1803663"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;line-height:1.25;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.46667px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans Bold';stroke-width:0.264583"
+         y="12.316851"
+         x="3.1803663"
+         id="tspan28619"
+         sodipodi:role="line">A.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;line-height:1.25;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="107.82217"
+       y="12.316851"
+       id="text2478"><tspan
+         sodipodi:role="line"
+         id="tspan2476"
+         x="107.82217"
+         y="12.316851"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.46667px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans Bold';stroke-width:0.264583">B.</tspan></text>
+  </g>
+</svg>
