@@ -14,6 +14,27 @@ PYTHON=$HOME/.apps/bin/python3
 
 declare -A TREE_INDICES=( ["SJBALL031"]=1 )
 
+function munge_samples {
+  # The inputs were originally taken from
+  # https://github.com/morrislab/pairtree-experiments. They are no longer in
+  # the most recent revision, but they live in the repo history. (See
+  # https://github.com/morrislab/pairtree-experiments/commit/e3f1f5401cb72e327a71556b8af0c68f31d5cb62).
+  cd $DATADIR/inputs.new
+
+  for paramsfn in *.params.json; do
+    runid=$(basename $paramsfn | cut -d. -f1)
+    cmd="$PYTHON $BASEDIR/bin/rename_and_hide_samps.py"
+    cmd+=" $paramsfn"
+    cmd+=" $paramsfn.new"
+    cmd+="&& $PYTHON $PTDIR/util/reorder_samples.py"
+    cmd+=" $runid.ssm"
+    cmd+=" $paramsfn.new"
+    cmd+=" \$($PYTHON $BASEDIR/bin/reorder_samps.py $paramsfn.new)"
+    cmd+="&& mv $paramsfn.new $paramsfn"
+    echo $cmd
+  done | parallel -j40 --halt 2 --eta
+}
+
 function compute_clusters {
   for conc in $(seq -10 3); do
     outd=$CLUSTRESULTDIR/clusters.conc.$(echo $conc | tr - _)
@@ -109,7 +130,7 @@ function plot_trees {
     cmd+=" $args"
     cmd+=" $TREERESULTDIR/${runid}.summposterior.html"
     echo $cmd
-  done  | parallel -j40 --halt 2 --eta
+  done #| parallel -j40 --halt 2 --eta
 }
 
 function make_tree_index {
@@ -188,19 +209,21 @@ function plot_steph_trees {
 }
 
 function main {
+  munge_samples
+
   #compute_clusters
   #compare_cluster_count
   #plot_clusters
   #make_cluster_index
 
   #run_pairtree
-  plot_trees
+  #plot_trees
 
-  calc_concord
-  plot_di
-  plot_steph_trees
-  make_tree_index
-  add_discord_to_index
+  #calc_concord
+  #plot_di
+  #plot_steph_trees
+  #make_tree_index
+  #add_discord_to_index
 }
 
 main

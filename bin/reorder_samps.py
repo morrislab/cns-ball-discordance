@@ -3,6 +3,30 @@ import argparse
 import json
 import re
 
+def reorder(samps):
+  xeno_suffixes = ('CNS', 'Spleen')
+  timepoints = ('Diagnosis', 'Relapse')
+
+  idxs = []
+  def add(name):
+    if name in samps:
+      idxs.append(samps.index(name))
+
+  for timepoint in timepoints:
+    add(timepoint)
+  for timepoint in timepoints:
+    xeno_bm = [samp for samp in samps if re.search('^%sXeno \d+ BM$' % timepoint[0].lower(), samp)]
+    xeno_bm = sorted(xeno_bm, key = lambda S: int(S.split(' ')[1]))
+    for samp in xeno_bm:
+      add(samp)
+      tokens = samp.split(' ')
+      for suffix in xeno_suffixes:
+        add(' '.join(tokens[:2] + [suffix]))
+
+  remaining = set(range(len(samps))) - set(idxs)
+  idxs += sorted(remaining)
+  return idxs
+
 def main():
   parser = argparse.ArgumentParser(
     description='LOL HI THERE',
@@ -15,24 +39,7 @@ def main():
     params = json.load(F)
   samps = params['samples']
 
-  xeno_suffixes = ('CNS', 'Spleen')
-
-  idxs = []
-  def add(name):
-    if name in samps:
-      idxs.append(samps.index(name))
-
-  for timepoint in ('Diagnosis', 'Relapse'):
-    add(timepoint)
-    xeno_bm = [samp for samp in samps if re.search('^%s Xeno \d+$' % timepoint, samp)]
-    xeno_bm = sorted(xeno_bm, key = lambda S: int(S.rsplit(' ', 1)[1]))
-    for samp in xeno_bm:
-      add(samp)
-      for suffix in xeno_suffixes:
-        add('%s %s' % (samp, suffix))
-
-  remaining = set(range(len(samps))) - set(idxs)
-  idxs += sorted(remaining)
+  idxs = reorder(samps)
   print(','.join([str(idx) for idx in idxs]))
 
 if __name__ == '__main__':
