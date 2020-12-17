@@ -55,7 +55,7 @@ def _plot_di(di_results):
     T = dict(
       type = 'scatter',
       mode = 'markers',
-      marker = {'size': 22, 'opacity': 0.65, 'color': '#000000'},
+      marker = {'size': 18, 'opacity': 0.75, 'color': '#000000'},
       x = X,
       y = Y,
       text = di_results['basenames'],
@@ -75,7 +75,19 @@ def _plot_di(di_results):
     )
     fig = go.Figure(data=T, layout=layout)
 
-    html += pio.to_html(fig, include_plotlyjs=False, full_html=False)
+    html += pio.to_html(
+      fig,
+      include_plotlyjs=False,
+      full_html=False,
+      config = {
+        'showLink': True,
+        'toImageButtonOptions': {
+          'format': 'svg',
+          'width': 600,
+          'height': 400,
+        },
+      }
+    )
   return html
 
 def _calc_test_stats(di_results):

@@ -132,7 +132,8 @@ StephEtaPlotter.prototype._plot_etas = function(svg, eta, pop_labels, samp_label
     .attr('display', function(d) { return eta[d.k][d.s]*self._col_height >= 2.0*self._bar_label_font_size ? 'inline' : 'none'})
     .attr('font-size', this._bar_label_font_size)
     .attr('dominant-baseline', 'central')
-    .attr('text-anchor', 'middle');
+    .attr('text-anchor', 'middle')
+    .style('display', 'none');
   bar_labels.append('tspan')
     .attr('x', d => 0.5*col_widths[d.s])
     .text(function(d, i) { return pop_labels[i] });
@@ -293,7 +294,8 @@ StephEtaPlotter.prototype._plot_discord = function(svg, discord_pairs, y_offset,
     .attr('font-size', this._bar_label_font_size)
     .attr('fill', d => d3.interpolateRgb('#000000', '#ffffff')(d.p_discord))
     .attr('dominant-baseline', 'central')
-    .attr('text-anchor', 'middle');
+    .attr('text-anchor', 'middle')
+    .style('display', 'none');
   labels.append('tspan')
     .attr('x', d => d.x_offset + 0.5*d.width)
     .text('Concordance:');

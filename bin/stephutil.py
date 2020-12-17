@@ -9,4 +9,3 @@ def find_samp_pairs(sampnames, tail1, tail2):
     idx2 = sampnames.index(other)
     pairs.append((idx1, idx2))
   return pairs
-
