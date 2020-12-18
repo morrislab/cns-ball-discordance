@@ -21,7 +21,6 @@ import plotutil
 
 import plotly.graph_objs as go
 import plotly.io as pio
-import csv
 
 def _choose_colours(N):
   import plotly.colors
@@ -266,9 +265,8 @@ def _plot_diversity_indices(div_idxs, sampnames, outf):
 
 def _parse_discord(discordfn):
   with open(discordfn) as F:
-    reader = csv.DictReader(F)
-    rows = list(reader)
-  discord = [(row['samp1'], row['samp2'], float(row['p_discord'])) for row in rows]
+    discord = json.load(F)
+  discord = [(row['samp1'], row['samp2'], row['p_discord']) for row in discord['concord']]
   return discord
 
 def main():

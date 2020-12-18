@@ -114,12 +114,12 @@ function plot_trees {
     runid=$(basename $resultfn | cut -d. -f1)
     args="--runid $runid"
     args+=" $INDIR/$runid.ssm"
-    args+=" $INDIR/${runid}.collapsed.params.json"
+    args+=" $INDIR/${runid}.params.json"
     args+=" $TREERESULTDIR/${runid}.results.npz"
 
     cmd="$PYTHON $PTDIR/bin/plottree"
     cmd+=" --reorder-subclones"
-    cmd+=" --remove-normal"
+    #cmd+=" --remove-normal"
     # The below works on my laptop's Bash, but magically stopped working on
     # SciNet after they apparently upgraded to Bash 4.2.46(2)-release.
     #if [[ -v "TREE_INDICES[$runid]" ]]; then
@@ -135,7 +135,7 @@ function plot_trees {
     cmd+=" $args"
     cmd+=" $TREERESULTDIR/${runid}.summposterior.html"
     echo $cmd
-  done #| parallel -j40 --halt 2 --eta
+  done | parallel -j40 --halt 2 --eta
 }
 
 function make_tree_index {
@@ -154,16 +154,23 @@ function make_tree_index {
 function calc_concord {
   for resultfn in $TREERESULTDIR/*.results.npz; do
     runid=$(basename $resultfn | cut -d. -f1)
-    cmd="cd $TREERESULTDIR && NUMBA_DISABLE_JIT=1 PYTHONPATH=$PTDIR/lib:$PYTHONPATH $PYTHON $BASEDIR/bin/calc_concordance.py"
+    truthfn="$DISCORDTRUTHDIR/${runid}.discord_truth.csv"
+
+    cmd="cd $TREERESULTDIR && NUMBA_DISABLE_JIT=1 PYTHONPATH=$PTDIR/lib:$PYTHONPATH"
+    cmd+=" $PYTHON $BASEDIR/bin/calc_concordance.py"
     if [[ ${TREE_INDICES[$runid]+abc} ]]; then
       cmd+=" --tree-index ${TREE_INDICES[$runid]}"
     fi
+    if [[ -f $truthfn ]]; then
+      cmd+=" --truth $truthfn"
+    fi
     cmd+=" $INDIR/$runid.ssm"
     cmd+=" $resultfn "
-    cmd+=" $DISCORDTRUTHDIR/${runid}.discord_truth.csv"
     cmd+=" > $TREERESULTDIR/${runid}.discord.json"
+    cmd+="&& $PYTHON $BASEDIR/bin/convert_discord_to_csv.py"
+    cmd+="  $TREERESULTDIR/${runid}.discord.{json,csv}"
     echo $cmd
-  done | parallel -j40 --halt 1 --eta
+  done | parallel -j40 --halt 2 --eta
 }
 
 function plot_di {
@@ -199,15 +206,15 @@ function plot_steph_trees {
 
     cmd="$PYTHON $BASEDIR/bin/plot_steph_tree.py"
     cmd+=" --reorder-subclones"
-    cmd+=" --remove-normal"
+    #cmd+=" --remove-normal"
     if [[ ${TREE_INDICES[$runid]+abc} ]]; then
       cmd+=" --tree-index ${TREE_INDICES[$runid]}"
     fi
     cmd+=" --runid $runid"
     cmd+=" $INDIR/$runid.ssm"
-    cmd+=" $INDIR/${runid}.collapsed.params.json"
+    cmd+=" $INDIR/${runid}.params.json"
     cmd+=" $TREERESULTDIR/${runid}.results.npz"
-    cmd+=" $TREERESULTDIR/${runid}.discord.csv"
+    cmd+=" $TREERESULTDIR/${runid}.discord.json"
     cmd+=" $TREERESULTDIR/${runid}.stephtree.html"
     echo $cmd
   done | parallel -j40 --halt 2 --eta
@@ -216,12 +223,12 @@ function plot_steph_trees {
 function main {
   #munge_samples
 
-  #compute_clusters
+  compute_clusters
   #compare_cluster_count
   #plot_clusters
   #make_cluster_index
 
-  run_pairtree
+  #run_pairtree
   #plot_trees
 
   #calc_concord

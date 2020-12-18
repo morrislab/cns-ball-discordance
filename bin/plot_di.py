@@ -99,7 +99,6 @@ def _calc_test_stats(di_results):
       stat, pval = scipy.stats.wilcoxon(
         di_results['%s1' % K],
         di_results['%s2' % K],
-        mode = 'exact',
         alternative = alt,
       )
       html += f'<tr><td>{alt}</td><td>{stat}</td><td>{pval}</td></tr>'

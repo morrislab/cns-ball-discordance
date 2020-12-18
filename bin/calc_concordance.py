@@ -145,13 +145,16 @@ def main():
     formatter_class=argparse.ArgumentDefaultsHelpFormatter
   )
   parser.add_argument('--tree-index', type=int, default=0)
+  parser.add_argument('--truth', dest='truth_fn')
   parser.add_argument('ssm_fn')
   parser.add_argument('results_fn')
-  parser.add_argument('truth_fn')
   args = parser.parse_args()
 
   variants = inputparser.load_ssms(args.ssm_fn)
-  truth = _parse_truth(args.truth_fn)
+  if args.truth_fn:
+    truth = _parse_truth(args.truth_fn)
+  else:
+    truth = {}
 
   results = resultserializer.Results(args.results_fn)
   sampnames = results.get('sampnames')
