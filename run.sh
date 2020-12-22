@@ -12,7 +12,7 @@ TREERESULTDIR=$BASEDIR/scratch/trees
 NCHAINS=40
 PYTHON=$HOME/.apps/bin/python3
 
-declare -A TREE_INDICES=( ["SJBALL031"]=1 )
+declare -A TREE_INDICES=( ["SJBALL031"]=0 )
 
 function munge_samples {
   # The inputs were originally taken from
@@ -119,7 +119,7 @@ function plot_trees {
 
     cmd="$PYTHON $PTDIR/bin/plottree"
     cmd+=" --reorder-subclones"
-    #cmd+=" --remove-normal"
+    cmd+=" --remove-normal"
     # The below works on my laptop's Bash, but magically stopped working on
     # SciNet after they apparently upgraded to Bash 4.2.46(2)-release.
     #if [[ -v "TREE_INDICES[$runid]" ]]; then
@@ -206,7 +206,7 @@ function plot_steph_trees {
 
     cmd="$PYTHON $BASEDIR/bin/plot_steph_tree.py"
     cmd+=" --reorder-subclones"
-    #cmd+=" --remove-normal"
+    cmd+=" --remove-normal"
     if [[ ${TREE_INDICES[$runid]+abc} ]]; then
       cmd+=" --tree-index ${TREE_INDICES[$runid]}"
     fi
@@ -223,19 +223,19 @@ function plot_steph_trees {
 function main {
   #munge_samples
 
-  compute_clusters
+  #compute_clusters
   #compare_cluster_count
   #plot_clusters
   #make_cluster_index
 
   #run_pairtree
-  #plot_trees
+  plot_trees
 
-  #calc_concord
-  #plot_di
-  #plot_steph_trees
-  #make_tree_index
-  #add_discord_to_index
+  calc_concord
+  plot_di
+  plot_steph_trees
+  make_tree_index
+  add_discord_to_index
 }
 
 main
