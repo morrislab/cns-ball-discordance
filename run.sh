@@ -30,7 +30,19 @@ function munge_samples {
     cmd+=" $runid.ssm"
     cmd+=" $paramsfn.new"
     cmd+=" \$($PYTHON $BASEDIR/bin/reorder_samps.py $paramsfn.new)"
-    cmd+="&& mv $paramsfn.new $paramsfn"
+    cmd+="&& cat $paramsfn.new | jq 'del(.structures, .clusters)' > $paramsfn"
+    cmd+="&& rm $paramsfn.new"
+    echo $cmd
+  done | parallel -j40 --halt 2 --eta
+}
+
+function compare_inputs {
+  cd $DATADIR/inputs
+  for paramsfn in *.params.json; do
+    runid=$(basename $paramsfn | cut -d. -f1)
+    cmd="$PYTHON $BASEDIR/misc/compare_ssms.py"
+    cmd+=" $HOME/work/pairtree-experiments/inputs/steph.xeno.pairtree/${runid}.{ssm,params.json}"
+    cmd+=" $PWD/${runid}.{ssm,params.json}"
     echo $cmd
   done | parallel -j40 --halt 2 --eta
 }
@@ -222,6 +234,7 @@ function plot_steph_trees {
 
 function main {
   #munge_samples
+  compare_inputs
 
   #compute_clusters
   #compare_cluster_count
@@ -229,13 +242,13 @@ function main {
   #make_cluster_index
 
   #run_pairtree
-  plot_trees
+  #plot_trees
 
-  calc_concord
-  plot_di
-  plot_steph_trees
-  make_tree_index
-  add_discord_to_index
+  #calc_concord
+  #plot_di
+  #plot_steph_trees
+  #make_tree_index
+  #add_discord_to_index
 }
 
 main
