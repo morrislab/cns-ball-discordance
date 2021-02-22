@@ -130,8 +130,8 @@ function plot_trees {
     args+=" $TREERESULTDIR/${runid}.results.npz"
 
     cmd="$PYTHON $PTDIR/bin/plottree"
-    cmd+=" --reorder-subclones"
-    cmd+=" --remove-normal"
+    #cmd+=" --reorder-subclones"
+    #cmd+=" --remove-normal"
     # The below works on my laptop's Bash, but magically stopped working on
     # SciNet after they apparently upgraded to Bash 4.2.46(2)-release.
     #if [[ -v "TREE_INDICES[$runid]" ]]; then
@@ -141,6 +141,9 @@ function plot_trees {
     fi
     cmd+=" $args"
     cmd+=" $TREERESULTDIR/${runid}.plottree.html"
+    echo $cmd
+
+    cmd="$PYTHON $PTDIR/bin/plotvars --parallel 1 $INDIR/$runid.{ssm,params.json} $TREERESULTDIR/$runid.clusters.html 2>&1"
     echo $cmd
 
     cmd="$PYTHON $PTDIR/bin/summposterior"
@@ -153,11 +156,27 @@ function plot_trees {
 function make_tree_index {
   cd $TREERESULTDIR
   (
+    echo "<!doctype html>"
+    echo "<html><head><meta charset='utf-8'><title>Steph concord results</title>"
+
+    echo "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css'>"
+    echo "<script src='https://code.jquery.com/jquery-3.5.1.slim.min.js'></script>"
+    echo "<script src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js'></script>"
+
+    # Trying to make the columns sortable is throwing some weird JS error, and
+    # I can't be bothered to debug it.
+    #echo "<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css'>"
+    #echo "<link rel='stylesheet' href='https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css'>"
+    #echo "<script src='https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js'></script>"
+    #echo "<link rel='stylesheet' href='https://unpkg.com/bootstrap-table@1.15.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.css'>"
+    #echo "<script src='https://unpkg.com/bootstrap-table@1.15.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.js'></script>"
+    echo "</head><body>"
     echo "<h1>Trees</h1>"
-    echo "<table>"
+    echo "<table class='table table-striped table-hover' data-toggle='table'>"
+
     for resultfn in *.results.npz; do
       runid=$(basename $resultfn | cut -d. -f1)
-      echo "<tr><td>$runid</td><td><a href=${runid}.plottree.html>orig tree</a></td><td><a href=${runid}.stephtree.html>tree with concord</a></td><td><a href=${runid}.summposterior.html>summary</a></td><td><a href=${runid}.di.html>diversity indices</a></td></tr>"
+      echo "<tr><td>$runid</td><td>$(cat $DATADIR/mapping.txt | grep "^$runid," | cut -d, -f2 | sed 's/^ALL/ALL /')</td><td><a href=${runid}.plottree.html>orig tree</a></td><td><a href=${runid}.stephtree.html>tree with concord</a></td><td><a href=${runid}.summposterior.html>summary</a></td><td><a href=${runid}.di.html>diversity indices</a></td></tr>"
     done
     echo "</table>"
   ) > index.html
@@ -185,6 +204,14 @@ function calc_concord {
   done | parallel -j40 --halt 2 --eta
 }
 
+function calc_concord_threshold {
+  cd $TREERESULTDIR
+  (
+    echo "<h1>log_bf threshold</h1>"
+    $PYTHON $BASEDIR/bin/calc_concord_threshold.py *.discord.json
+  ) >> index.html
+}
+
 function plot_di {
   for resultfn in $TREERESULTDIR/*.results.npz; do
     runid=$(basename $resultfn | cut -d. -f1)
@@ -208,6 +235,7 @@ function add_discord_to_index {
       $PYTHON $BASEDIR/bin/csv2html.py $disfn
     done
   ) >> index.html
+  echo "</body></html>" >> index.html
 }
 
 function plot_steph_trees {
@@ -234,7 +262,7 @@ function plot_steph_trees {
 
 function main {
   #munge_samples
-  compare_inputs
+  #compare_inputs
 
   #compute_clusters
   #compare_cluster_count
@@ -242,13 +270,14 @@ function main {
   #make_cluster_index
 
   #run_pairtree
-  #plot_trees
 
+  #plot_trees
   #calc_concord
   #plot_di
   #plot_steph_trees
-  #make_tree_index
-  #add_discord_to_index
+  make_tree_index
+  calc_concord_threshold
+  add_discord_to_index
 }
 
 main
